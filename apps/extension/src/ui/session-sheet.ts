@@ -5,7 +5,7 @@
 
 import type { PlayerInfo } from "@genesys/shared";
 import type { GameState, Identity } from "../multiplayer/client";
-import type { HostStatus } from "../multiplayer/host-bridge";
+import { HOST_DOWNLOAD_URL, HostNotInstalledError, type HostStatus } from "../multiplayer/host-bridge";
 import { h } from "./dom";
 import { characterLabel } from "./result";
 
@@ -45,7 +45,7 @@ export class SessionSheet {
   private readonly characterClass: HTMLInputElement;
   private readonly identityFields: HTMLElement;
   private readonly invite: HTMLInputElement;
-  private readonly error = h("p", { class: "notice", role: "alert", hidden: true });
+  private readonly error = h("div", { class: "notice", role: "alert", hidden: true });
   private readonly body = h("div", { class: "sheet-body" });
   private busy = false;
   /** The identity last written into the fields, to tell the player's own edits apart. */
@@ -173,7 +173,8 @@ export class SessionSheet {
     try {
       await this.actions.hostStart(identity);
     } catch (e) {
-      this.showError(e instanceof Error ? e.message : String(e));
+      if (e instanceof HostNotInstalledError) this.showHostMissing();
+      else this.showError(e instanceof Error ? e.message : String(e));
     } finally {
       this.busy = false;
       button.disabled = false;
@@ -318,7 +319,22 @@ export class SessionSheet {
   }
 
   private showError(message: string): void {
-    this.error.textContent = message;
+    this.error.replaceChildren(message);
+    this.error.hidden = false;
+  }
+
+  /** The GM hasn't installed the host companion: where to get it and how, in a few steps. */
+  private showHostMissing(): void {
+    this.error.replaceChildren(
+      h("span", {}, "Hosting needs the free Genesys host companion on this computer (Windows, with Node.js 20 or newer)."),
+      h(
+        "ol",
+        { class: "host-steps" },
+        h("li", {}, h("a", { href: HOST_DOWNLOAD_URL, target: "_blank", rel: "noopener noreferrer" }, "Download the host companion"), " (the genesys-host zip)."),
+        h("li", {}, "Unzip it and run install-host.ps1, as its README.txt explains."),
+        h("li", {}, "Restart your browser, then choose Host a game again."),
+      ),
+    );
     this.error.hidden = false;
   }
 }

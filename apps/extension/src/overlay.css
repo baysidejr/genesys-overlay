@@ -1859,3 +1859,19 @@ select.field optgroup {
 .sheet[data-theme="light"] .career-box:checked::after {
   border-color: #ffffff;
 }
+
+/* Steps to install the host companion, under the game panel's notice. */
+.host-steps {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  color: var(--text);
+}
+
+.host-steps li + li {
+  margin-top: 2px;
+}
+
+.notice a {
+  color: var(--orange);
+  font-weight: 600;
+}

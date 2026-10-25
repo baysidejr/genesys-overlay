@@ -34,8 +34,15 @@ export type HostBridgeMessage =
   | { kind: "response"; bridgeId: number; ok: boolean; result?: unknown; error?: string }
   | { kind: "event"; event: string; data: unknown };
 
-export const NOT_INSTALLED =
-  "Hosting needs the Genesys host companion on this computer. Install it once with install-host.ps1 (see the README), then try again.";
+/** Where GMs download the host companion: the newest GitHub release. */
+export const HOST_DOWNLOAD_URL = "https://github.com/baysidejr/genesys-overlay/releases/latest";
+
+/** The host companion isn't installed on this computer. The game panel shows where to get it. */
+export class HostNotInstalledError extends Error {
+  constructor() {
+    super(`Hosting needs the Genesys host companion on this computer. Download it from ${HOST_DOWNLOAD_URL}, then try again.`);
+  }
+}
 
 export class HostBridge {
   private port: chrome.runtime.Port | null = null;
@@ -79,7 +86,7 @@ export class HostBridge {
       if (!p) return;
       this.pending.delete(msg.bridgeId);
       if (msg.ok) p.resolve(msg.result);
-      else p.reject(new Error(msg.error === "not-installed" ? NOT_INSTALLED : (msg.error ?? "The host companion didn't answer.")));
+      else p.reject(msg.error === "not-installed" ? new HostNotInstalledError() : new Error(msg.error ?? "The host companion didn't answer."));
     });
     port.onDisconnect.addListener(() => {
       // The service worker restarted; the next request reconnects.
