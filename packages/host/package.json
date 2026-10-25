@@ -1,7 +1,7 @@
 {
   "name": "@genesys/host",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "GM host companion: runs the multiplayer session on the GM's computer and shares it through a Cloudflare Quick Tunnel.",
   "exports": {
