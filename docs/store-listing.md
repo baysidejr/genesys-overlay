@@ -38,6 +38,7 @@ Unofficial, fan-made Genesys RPG dice and character sheets for Alchemy RPG. Not 
 - Store icon: `store-icon-128.png`
 - Screenshots (1280×800 JPEG): `1-dice-roll.jpg`, `2-sheet-genesys.jpg`, `3-sheet-terrinoth.jpg`, `4-sheet-keyforge.jpg`, `5-spells-terrinoth.jpg`
 - Small promo tile (440×280 PNG): `small-promo-tile.png`
+- Marquee promo tile (1400×560 PNG): `marquee-promo-tile.png`
 
 **Homepage URL:** https://github.com/baysidejr/genesys-overlay
 
