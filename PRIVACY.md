@@ -1,8 +1,8 @@
 # Genesys Overlay privacy policy
 
-_Effective date: 25 October 2026. Last updated: 25 October 2026._
+_Effective date: 25 October 2026. Last updated: 25 October 2026 (opt-in sites)._
 
-Genesys Overlay is an unofficial, fan-made browser extension that adds Genesys RPG dice and character sheets to Alchemy RPG (app.alchemyrpg.com). It is not affiliated with Fantasy Flight Games, Edge Studio or Alchemy RPG.
+Genesys Overlay is an unofficial, fan-made browser extension that adds Genesys RPG dice and character sheets to Alchemy RPG (app.alchemyrpg.com), and to other tabletop sites you choose to turn it on for. It is not affiliated with Fantasy Flight Games, Edge Studio or Alchemy RPG.
 
 **In short:** the extension has no server of its own and no accounts. It collects no analytics and shows no ads. Your characters and settings stay in your browser. When you join a game, your name, your character's name and career, and your dice rolls go to the game master's computer, and to no one else.
 
@@ -41,6 +41,8 @@ Outside a game, rolls are practice rolls. They're shown only on your screen and 
 - **storage:** saves your characters and preferences, as described above.
 - **nativeMessaging:** lets a GM's browser start and control the host companion installed on the GM's own computer. It's used only when a GM chooses **Host a game**, and talks only to that local program.
 - **Site access** to `app.alchemyrpg.com` (to show the dice and sheet there) and to invitation pages on `trycloudflare.com` (to save the link when you open an invitation).
+- **Other sites, only if you turn them on:** from the toolbar button you can turn the overlay on for another tabletop. Chrome asks you to allow that one site. On it, the extension only draws its dice and sheet on top of the page. It doesn't read or collect the page's content. You can turn a site off again from the same button.
+- **scripting and activeTab:** let the toolbar button see which site you're on, and show the overlay on the sites you've turned on.
 
 ## What the developer does not do
 

@@ -1,6 +1,6 @@
 # genesys-overlay
 
-Genesys RPG dice as a Chrome extension overlay on your virtual tabletop (Alchemy RPG). It handles dice only. The tabletop keeps maps, tokens and everything else.
+Genesys RPG dice and character sheets as a Chrome extension overlay on your virtual tabletop. It runs on Alchemy RPG out of the box, and on any other tabletop you turn it on for. It handles dice and sheets only. The tabletop keeps maps, tokens and everything else.
 
 Design doc: [Genesys Overlay: Dice, Sheet Styles & Tooling](https://claude.ai/artifact/KdWPHL6Js9pxaePVYTt2MM)
 
@@ -25,6 +25,12 @@ pnpm dev:extension   # rebuilds apps/extension/dist on change
 ```
 
 Load the extension: open `chrome://extensions`, turn on Developer mode, choose **Load unpacked** and pick `apps/extension/dist`. Its ID is `oompfooljghcchjdigpjicjdlncaaoki`, fixed by the `key` in `manifest.json`.
+
+## Other tabletops
+
+Alchemy RPG works without any setup. For another tabletop (Roll20, Owlbear Rodeo, a Foundry VTT server, and so on), open it, click the Genesys Overlay icon in Chrome's toolbar and choose **Turn on for this site**. Chrome asks once for that site only, and the overlay appears right away, then every time you visit. The same menu lists your sites and turns them off.
+
+Under the hood, the extension asks for one site's permission at a time from its optional `https://*/*` host permission, and the background worker registers the overlay for exactly the sites granted (`apps/extension/src/sites.ts`).
 
 ## Playing together
 

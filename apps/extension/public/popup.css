@@ -1,0 +1,152 @@
+/* The toolbar popup: same slate-and-orange look as the dice tray. */
+
+:root {
+  color-scheme: dark;
+  --felt: #25303c;
+  --raised: #303c4a;
+  --raised-hover: #384657;
+  --rim: #435163;
+  --text: #e6ebf0;
+  --muted: #9aa7b5;
+  --orange: #f29a2e;
+  --orange-hover: #ffab45;
+  --orange-ink: #2b1800;
+  --good: #8bdc96;
+  --focus: #9fd3ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 320px;
+  margin: 0;
+  background: var(--felt);
+  color: var(--text);
+  font: 14px/1.4 system-ui, "Segoe UI", sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--rim);
+}
+
+h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+main {
+  display: grid;
+  gap: 14px;
+  padding: 12px 14px;
+}
+
+section {
+  display: grid;
+  gap: 6px;
+}
+
+h2 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+p {
+  margin: 0;
+}
+
+.site {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.status[data-on="true"] {
+  color: var(--good);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+#toggle {
+  justify-self: start;
+  padding: 7px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--orange);
+  color: var(--orange-ink);
+  font-weight: 650;
+}
+
+#toggle:hover {
+  background: var(--orange-hover);
+}
+
+#toggle.secondary {
+  border: 1px solid var(--rim);
+  background: var(--raised);
+  color: var(--text);
+  font-weight: 500;
+}
+
+#toggle.secondary:hover {
+  background: var(--raised-hover);
+}
+
+ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 4px 4px 10px;
+  border-radius: 8px;
+  background: var(--raised);
+  overflow-wrap: anywhere;
+}
+
+li button {
+  flex: none;
+  padding: 3px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+}
+
+li button:hover {
+  background: var(--raised-hover);
+  color: var(--text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+footer {
+  padding: 8px 14px 12px;
+  font-size: 12px;
+}

@@ -5,8 +5,11 @@
 // One native connection serves every tab and outlives tab reloads, so
 // reloading the tabletop doesn't end the session. While it's open, Chrome
 // keeps this worker alive. It's closed once the session has stopped.
+//
+// It also keeps the overlay registered on the sites the player turned on.
 
 import type { HostBridgeMessage, HostBridgeRequest } from "./multiplayer/host-bridge";
+import { optedInSites, SITES_SCRIPT_ID } from "./sites";
 
 const NATIVE_HOST = "com.genesys_overlay.host";
 
@@ -82,4 +85,56 @@ chrome.runtime.onConnect.addListener((port) => {
     const { bridgeId: _drop, ...command } = req;
     connectNative().postMessage({ ...command, id });
   });
+});
+
+// ---------- Opt-in sites ----------
+// Alchemy RPG is in the manifest. Other sites run the overlay only after the
+// player turns them on from the toolbar popup, which asks Chrome for that
+// site's permission. One registered content script covers every site that
+// has it, and is rebuilt whenever permissions change, including when the
+// player removes a site in chrome://extensions.
+
+async function syncSites(): Promise<void> {
+  const { origins } = await chrome.permissions.getAll();
+  const sites = optedInSites(origins);
+  const registered = await chrome.scripting.getRegisteredContentScripts({ ids: [SITES_SCRIPT_ID] });
+  if (registered.length) await chrome.scripting.unregisterContentScripts({ ids: [SITES_SCRIPT_ID] });
+  if (!sites.length) return;
+  await chrome.scripting.registerContentScripts([
+    { id: SITES_SCRIPT_ID, matches: sites, js: ["content.js"], runAt: "document_idle", persistAcrossSessions: true },
+  ]);
+}
+
+// One sync at a time, so quick changes can't race each other.
+let syncing: Promise<void> = Promise.resolve();
+const resync = () => {
+  syncing = syncing.then(syncSites, syncSites).catch((e: unknown) => console.error("Couldn't update the overlay's sites", e));
+};
+
+chrome.runtime.onInstalled.addListener(resync);
+chrome.runtime.onStartup.addListener(resync);
+
+// A site was turned on: register it, and add the overlay to tabs already
+// open there, so the player doesn't have to reload.
+chrome.permissions.onAdded.addListener(async ({ origins }) => {
+  resync();
+  const sites = optedInSites(origins);
+  if (!sites.length) return;
+  for (const tab of await chrome.tabs.query({ url: sites })) {
+    if (tab.id === undefined) continue;
+    await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] }).catch(() => undefined);
+  }
+});
+
+// A site was turned off: unregister it, and ask open tabs on it to remove
+// the overlay. The permission is already gone, so every tab hears and only
+// tabs on that site act.
+chrome.permissions.onRemoved.addListener(async ({ origins }) => {
+  resync();
+  const sites = optedInSites(origins);
+  if (!sites.length) return;
+  for (const tab of await chrome.tabs.query({})) {
+    if (tab.id === undefined) continue;
+    chrome.tabs.sendMessage(tab.id, { type: "sites.removed", sites }).catch(() => undefined);
+  }
 });

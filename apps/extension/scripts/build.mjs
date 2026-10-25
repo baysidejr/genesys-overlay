@@ -2,7 +2,9 @@
 // each is a separate self-contained bundle (MV3 can't load remote code).
 //   content.js     the overlay, on the tabletop page
 //   invite.js      saves the GM's invitation, on the tunnel's /join page
-//   background.js  service worker relaying Host game controls to the host companion
+//   background.js  service worker relaying Host game controls to the host companion,
+//                  and keeping the overlay registered on opted-in sites
+//   popup.js       the toolbar popup that turns the overlay on or off for a site
 //
 //   node scripts/build.mjs [--watch] [--mode development]
 
@@ -15,6 +17,7 @@ const ENTRIES = [
   { name: "content", format: "iife" },
   { name: "invite", format: "iife" },
   { name: "background", format: "es" },
+  { name: "popup", format: "iife" },
 ];
 
 export async function buildExtension({ mode = "production", watch = false } = {}) {
@@ -47,5 +50,5 @@ export async function buildExtension({ mode = "production", watch = false } = {}
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const mode = process.argv.includes("--mode") ? process.argv[process.argv.indexOf("--mode") + 1] : "production";
   await buildExtension({ mode, watch: process.argv.includes("--watch") });
-  if (!process.argv.includes("--watch")) console.log("Built dist/ (content.js, invite.js, background.js)");
+  if (!process.argv.includes("--watch")) console.log("Built dist/ (content.js, invite.js, background.js, popup.js)");
 }

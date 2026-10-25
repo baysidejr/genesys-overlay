@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Genesys Overlay</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/icon-32.png" width="24" height="24" alt="">
+    <h1>Genesys Overlay</h1>
+  </header>
+  <main>
+    <section class="current" aria-live="polite">
+      <p class="site" id="site"></p>
+      <p class="status" id="status"></p>
+      <button id="toggle" hidden></button>
+    </section>
+    <section>
+      <h2>Sites you've turned on</h2>
+      <ul id="sites"></ul>
+      <p class="muted" id="no-sites">None yet. Open your tabletop, then turn it on here.</p>
+    </section>
+  </main>
+  <footer class="muted">Always on for Alchemy RPG. Unofficial fan-made tool.</footer>
+  <script src="popup.js"></script>
+</body>
+</html>
