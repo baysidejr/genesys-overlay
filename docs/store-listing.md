@@ -6,7 +6,7 @@ Text and answers for the Chrome Web Store developer dashboard, plus a checklist 
 
 1. Bump `version` in `apps/extension/public/manifest.json`.
 2. Run `pnpm package:store`. It writes `apps/extension/release/genesys-overlay-<version>-store.zip`, with the manifest's `key` removed.
-3. Publish the privacy policy (`PRIVACY.md`) at a public address and fill in its contact line and effective date. The GitHub repository is private, so it needs another home, such as GitHub Pages or a public gist.
+3. The privacy policy is `PRIVACY.md`: https://github.com/baysidejr/genesys-overlay/blob/main/PRIVACY.md
 4. Confirm you may redistribute `apps/extension/src/assets/sounds/standard-dice-roll.mp3`.
 5. First upload only: once the store item exists, copy its extension ID into `$StoreExtensionId` in `packages/host/scripts/install-host.ps1`, commit it, and have GMs run the installer again.
 6. Consider **Unlisted** visibility: only people with the link can install it.
@@ -32,9 +32,16 @@ Unofficial, fan-made Genesys RPG dice and character sheets for Alchemy RPG. Not 
 >
 > Unofficial fan-made tool. Not affiliated with, endorsed by or sponsored by Fantasy Flight Games, Edge Studio or Alchemy RPG. Genesys, Realms of Terrinoth and KeyForge are trademarks of their respective owners. No official artwork or logos are included.
 
-**Category:** Entertainment (or Fun)
+**Category:** Lifestyle → Games. **Language:** English. **Mature content:** No.
 
-**Screenshots:** 1280×800. Suggested: the dice tray mid-roll over a map; the character sheet in each theme; the game panel with players.
+**Images** (in [docs/store](store)):
+- Store icon: `store-icon-128.png`
+- Screenshots (1280×800 JPEG): `1-dice-roll.jpg`, `2-sheet-genesys.jpg`, `3-sheet-terrinoth.jpg`, `4-sheet-keyforge.jpg`, `5-spells-terrinoth.jpg`
+- Small promo tile (440×280 PNG): `small-promo-tile.png`
+
+**Homepage URL:** https://github.com/baysidejr/genesys-overlay
+
+**Support URL:** https://github.com/baysidejr/genesys-overlay/issues
 
 ## Privacy practices tab
 
@@ -61,4 +68,4 @@ Rolling Genesys RPG dice and keeping Genesys character sheets on the Alchemy RPG
 - Not used or transferred for purposes unrelated to the single purpose: true.
 - Not used or transferred to determine creditworthiness or for lending: true.
 
-**Privacy policy URL:** the public address of `PRIVACY.md`.
+**Privacy policy URL:** https://github.com/baysidejr/genesys-overlay/blob/main/PRIVACY.md

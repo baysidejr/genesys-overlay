@@ -1,6 +1,6 @@
 # Genesys Overlay privacy policy
 
-_Draft. Effective date: [date of publication]. Last updated: 25 October 2026._
+_Effective date: 25 October 2026. Last updated: 25 October 2026._
 
 Genesys Overlay is an unofficial, fan-made browser extension that adds Genesys RPG dice and character sheets to Alchemy RPG (app.alchemyrpg.com). It is not affiliated with Fantasy Flight Games, Edge Studio or Alchemy RPG.
 
@@ -58,4 +58,4 @@ If this policy changes, the new version will be published at this address with a
 
 ## Contact
 
-[contact email or support page]
+Questions or concerns: open an issue at https://github.com/baysidejr/genesys-overlay/issues.
