@@ -34,8 +34,6 @@ The character sheet opens beside it. Pick a theme from the palette button: Dark,
 
 <img src="docs/images/alchemy-play-together.png" width="300" alt="The Play together panel in the KeyForge theme, with fields for player name, character and class, an invitation link to join a game, and a Host a game button">
 
-Design doc: [Genesys Overlay: Dice, Sheet Styles & Tooling](https://claude.ai/artifact/KdWPHL6Js9pxaePVYTt2MM)
-
 ## Layout
 
 | Path | What it is |
