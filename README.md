@@ -12,6 +12,28 @@ Character sheets for Genesys core, Realms of Terrinoth and KeyForge, each with a
   <img src="docs/store/4-sheet-keyforge.jpg" width="32%" alt="Character sheet in the KeyForge theme">
 </p>
 
+### On Alchemy RPG
+
+The dice tray sits in a corner of the table, and collapses to a single button when you don't need it:
+
+<p>
+  <img src="docs/images/alchemy-dice-tray.webp" width="49%" alt="The dice tray open over an Alchemy RPG scene">
+  <img src="docs/images/alchemy-tray-collapsed.webp" width="49%" alt="The dice tray collapsed to a small button over the same scene">
+</p>
+
+The character sheet opens beside it. Pick a theme from the palette button: Dark, Light, Genesys, Terrinoth or KeyForge.
+
+<p>
+  <img src="docs/images/alchemy-sheet-dark.webp" width="49%" alt="Character sheet in the Dark theme over Alchemy RPG">
+  <img src="docs/images/alchemy-sheet-genesys.webp" width="49%" alt="Character sheet in the Genesys theme over Alchemy RPG">
+  <img src="docs/images/alchemy-sheet-terrinoth.webp" width="49%" alt="Character sheet in the Terrinoth theme over Alchemy RPG">
+  <img src="docs/images/alchemy-sheet-keyforge.webp" width="49%" alt="Character sheet in the KeyForge theme over Alchemy RPG, with the theme menu open">
+</p>
+
+**Play together** joins a game with the GM's invitation link, or hosts one:
+
+<img src="docs/images/alchemy-play-together.png" width="300" alt="The Play together panel in the KeyForge theme, with fields for player name, character and class, an invitation link to join a game, and a Host a game button">
+
 Design doc: [Genesys Overlay: Dice, Sheet Styles & Tooling](https://claude.ai/artifact/KdWPHL6Js9pxaePVYTt2MM)
 
 ## Layout
