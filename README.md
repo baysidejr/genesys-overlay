@@ -28,8 +28,13 @@ Load the extension: open `chrome://extensions`, turn on Developer mode, choose *
 
 ## Playing together
 
-1. **GM, once:** install the host companion. See [packages/host/README.md](packages/host/README.md).
-2. **GM, each session:** in the dice tray, open the game panel, choose **Host a game**, and send the invitation link to your players.
+1. **GM, once:** install the host companion (Windows, needs [Node.js 20+](https://nodejs.org)):
+   1. Download `genesys-host-<version>.zip` from the [latest release](https://github.com/baysidejr/genesys-overlay/releases/latest) and unzip it.
+   2. In the unzipped folder, run `powershell -ExecutionPolicy Bypass -File .\install-host.ps1`.
+   3. Restart the browser.
+
+   The zip's `README.txt` walks through it. To install from a clone of this repository instead, see [packages/host/README.md](packages/host/README.md).
+2. **GM, each session:** in the dice tray, click **Play together**, choose **Host a game**, and send the invitation link to your players.
 3. **Players:** open the link (the extension saves it), then choose **Join game** in the dice tray. Or paste the link there.
 4. The GM approves each player. Rolls then land on the roller's screen and appear in everyone's feed.
 
@@ -42,6 +47,12 @@ pnpm --filter @genesys/extension preview:dice
 ```
 
 This shows the overlay over a stand-in map at http://localhost:5174. To try multiplayer there, start a local game with `pnpm host:local` and paste its invitation into **Join game**. Hosting from the tray needs the installed extension.
+
+## Releasing the host companion
+
+1. Bump `version` in `packages/host/package.json`, and check `$StoreExtensionId` in `packages/host/scripts/install-host.ps1` is filled in.
+2. Run `pnpm package:host`. It writes `packages/host/release/genesys-host-<version>.zip` with the installer, uninstaller, host scripts and a README for GMs.
+3. Create a GitHub release and attach the zip.
 
 ## Packaging the extension
 

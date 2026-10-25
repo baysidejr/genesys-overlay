@@ -9,6 +9,7 @@
     "host:local": "pnpm --filter @genesys/host start -- --local",
     "package": "pnpm --filter @genesys/extension package",
     "package:store": "pnpm --filter @genesys/extension package:store",
+    "package:host": "pnpm --filter @genesys/host package",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test"

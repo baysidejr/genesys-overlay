@@ -8,6 +8,16 @@ Quick Tunnels need no Cloudflare account. Cloudflare offers them for testing and
 
 Needs Windows and [Node.js 20+](https://nodejs.org).
 
+**From a release:** download `genesys-host-<version>.zip` from the [latest release](https://github.com/baysidejr/genesys-overlay/releases/latest), unzip it, and in that folder run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install-host.ps1
+```
+
+The zip's `README.txt` has step-by-step instructions for GMs. `pnpm package:host` builds the zip.
+
+**From a clone of this repository:**
+
 ```powershell
 pnpm --filter @genesys/host build
 powershell -ExecutionPolicy Bypass -File packages/host/scripts/install-host.ps1
