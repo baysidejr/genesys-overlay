@@ -28,7 +28,7 @@ The installer:
 - copies the host to `%LOCALAPPDATA%\GenesysOverlay\host`
 - downloads cloudflared 2026.10.0 from Cloudflare's GitHub releases, and keeps it only if its SHA-256 and Cloudflare code signature both match
 - registers the Native Messaging host `com.genesys_overlay.host` for Chrome and Edge under `HKEY_CURRENT_USER` (no administrator rights)
-- allows only the Genesys Overlay extension to start it: the developer build (ID `oompfooljghcchjdigpjicjdlncaaoki`, from the key in `manifest.json`) and the Chrome Web Store build (ID `ilienhlbekojgciacmoaefgijpcageom`, set in `$StoreExtensionId` at the top of `install-host.ps1`)
+- allows only the Genesys Overlay extension to start it: the developer build (ID `oompfooljghcchjdigpjicjdlncaaoki`, from the key in `manifest.json`) and the Chrome Web Store build (ID `onipnfaplhlhdmebjallagonnjhojcgp`, set in `$StoreExtensionId` at the top of `install-host.ps1`)
 
 To allow another ID as well, for example an Edge Add-ons install, pass it in:
 

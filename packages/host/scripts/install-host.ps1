@@ -38,7 +38,7 @@ $HostName = 'com.genesys_overlay.host'
 
 # The Chrome Web Store build's ID. The store shows it once the item is
 # created; fill it in then, so GMs who install from the store can host too.
-$StoreExtensionId = 'ilienhlbekojgciacmoaefgijpcageom'
+$StoreExtensionId = 'onipnfaplhlhdmebjallagonnjhojcgp'
 $AllowedIds = @(@($ExtensionId) + @($StoreExtensionId) | Where-Object { $_ } | Select-Object -Unique)
 
 # Pinned cloudflared release. Update all three together.
