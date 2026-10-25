@@ -2,6 +2,16 @@
 
 Genesys RPG dice and character sheets as a Chrome extension overlay on your virtual tabletop. It runs on Alchemy RPG out of the box, and on any other tabletop you turn it on for. It handles dice and sheets only. The tabletop keeps maps, tokens and everything else.
 
+![3D Genesys dice landing on a map, with the result card showing a success and two advantage, and the dice tray in the corner](docs/store/1-dice-roll.jpg)
+
+Character sheets for Genesys core, Realms of Terrinoth and KeyForge, each with a theme in the style of its printed sheet:
+
+<p>
+  <img src="docs/store/2-sheet-genesys.jpg" width="32%" alt="Character sheet in the Genesys theme">
+  <img src="docs/store/3-sheet-terrinoth.jpg" width="32%" alt="Character sheet in the Realms of Terrinoth theme">
+  <img src="docs/store/4-sheet-keyforge.jpg" width="32%" alt="Character sheet in the KeyForge theme">
+</p>
+
 Design doc: [Genesys Overlay: Dice, Sheet Styles & Tooling](https://claude.ai/artifact/KdWPHL6Js9pxaePVYTt2MM)
 
 ## Layout
