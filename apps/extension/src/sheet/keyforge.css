@@ -1,0 +1,1024 @@
+/* =========================================================================
+   KeyForge theme: recreates the look of the KeyForge: Secrets of the
+   Crucible character sheets (white paper, boxes outlined in thick maroon,
+   slanted red tabs with gold italic condensed capitals, orange-brown
+   captions, white characteristic circles on a pale rose band, chamfered
+   stat boxes, red-headed talent cards over "XP / TIER" labels). Built from
+   CSS only; no artwork or logo from the printed sheets is used.
+   ========================================================================= */
+
+/* The dice tray and roll results wear the sheet's theme too. */
+.sheet[data-theme="keyforge"],
+.tray[data-theme="keyforge"],
+.results[data-theme="keyforge"] {
+  --k-maroon: #5a1a1c;
+  --k-red: #8e1f22;
+  --k-red-2: #a8282b;
+  --k-gold: #f6c544;
+  --k-label: #bf5a2c;
+  --k-line: #b88a78;
+  --k-band: #e9dcdc;
+  --k-paper: #ffffff;
+  --k-box: #fafafa;
+  --k-ink: #222;
+  --k-display: "Bahnschrift Condensed", "Bahnschrift SemiCondensed", "Roboto Condensed", "Arial Narrow", sans-serif;
+  --k-serif: "Minion Pro", "Palatino Linotype", Georgia, serif;
+
+  --felt: var(--k-paper);
+  --raised: #ffffff;
+  --raised-hover: #f6f0f0;
+  --rim: #c9b3ab;
+  --text: var(--k-ink);
+  --muted: #8a5a48;
+  --orange: var(--k-red);
+  --orange-hover: var(--k-red-2);
+  --orange-ink: var(--k-gold);
+  --good: var(--k-red);
+  --bad: #b3261e;
+  --focus: #1f6fd1;
+  --well: var(--k-box);
+  --well-deep: #f4eeee;
+  --hairline: rgb(90 26 28 / 0.18);
+  --hover-tint: rgb(142 31 34 / 0.06);
+  --shadow: 0 24px 60px -16px rgb(20 0 0 / 0.5), 0 2px 8px rgb(20 0 0 / 0.2);
+  --felt-texture: none;
+}
+
+.sheet[data-theme="keyforge"] .sheet-panel {
+  background: var(--k-paper);
+}
+
+.sheet[data-theme="keyforge"] .sheet-head {
+  background: var(--k-maroon);
+  border-bottom: 0;
+}
+
+.sheet[data-theme="keyforge"] .sheet-head :is(.title, .icon-button) {
+  color: var(--k-gold);
+}
+
+.sheet[data-theme="keyforge"] .sheet-head .title {
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.sheet[data-theme="keyforge"] .sheet-tab {
+  color: #f3dede;
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="keyforge"] .sheet-tab[aria-selected="true"] {
+  border-color: var(--k-red-2);
+  background: var(--k-red);
+  color: var(--k-gold);
+}
+
+.sheet[data-theme="keyforge"] .sheet-scroll {
+  padding: 18px 30px 26px;
+}
+
+.sheet[data-theme="keyforge"] .sheet-section {
+  border-bottom: 0;
+}
+
+.sheet[data-theme="keyforge"] :is(.sheet-field, .number-field, select.field) {
+  border-color: transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--k-ink);
+}
+
+.sheet[data-theme="keyforge"] :is(.sheet-field, .number-field, select.field):hover {
+  border-color: var(--rim);
+}
+
+/* Captions: orange-brown condensed capitals. */
+.sheet[data-theme="keyforge"] :is(.field-label > span, .skill-group-head, .weapons-head, .talents-head, .spell-options-title, .zone-label) {
+  color: var(--k-label);
+  font-family: var(--k-display);
+  font-weight: 600;
+  font-size: 13.5px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+/* ---------- Boxes with red tabs ---------- */
+
+/* Every boxed section: thick maroon outline with a slanted red tab on top. */
+.sheet[data-theme="keyforge"] :is(.sec-skills, .sec-effects, .sec-weapons, .page-story > .sheet-section, .sec-cargo, .sec-occupants, .sec-spells-intro, .sec-pyramid-info) {
+  position: relative;
+  margin-top: 30px;
+  padding: 16px 16px 14px;
+  border: 4px solid var(--k-maroon);
+  border-top-width: 6px;
+  background: var(--k-box);
+}
+
+.sheet[data-theme="keyforge"] :is(.sec-skills, .sec-effects, .sec-weapons, .page-story > .sheet-section, .sec-cargo, .sec-occupants, .sec-spells-intro, .sec-pyramid-info) > :is(.sheet-heading, .sheet-banner) {
+  position: absolute;
+  top: -32px;
+  left: -4px;
+  width: auto;
+  min-width: 190px;
+  margin: 0;
+  padding: 4px 34px 4px 26px;
+  border-radius: 0;
+  background: linear-gradient(100deg, var(--k-maroon) 0 12%, var(--k-red) 40%, var(--k-red-2));
+  clip-path: polygon(3% 0, 100% 0, 96% 100%, 0 100%);
+  color: var(--k-gold);
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 18px;
+  font-variant: normal;
+  letter-spacing: 0.01em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+/* ---------- Page 1 ---------- */
+
+.sheet[data-theme="keyforge"] .page-play {
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 22px;
+  row-gap: 14px;
+}
+
+.sheet[data-theme="keyforge"] .page-play > .sec-header { grid-column: 1 / 6; grid-row: 1; }
+.sheet[data-theme="keyforge"] .page-play > .sec-characteristics { grid-column: 1 / -1; grid-row: 2; }
+.sheet[data-theme="keyforge"] .page-play > .sec-derived { grid-column: 1 / -1; grid-row: 3; }
+.sheet[data-theme="keyforge"] .page-play > .sec-skills { grid-column: 1 / -1; grid-row: 4; }
+.sheet[data-theme="keyforge"] .page-play > .sec-effects { grid-column: 10 / -1; grid-row: 4; }
+.sheet[data-theme="keyforge"] .page-play > .sec-weapons { grid-column: 1 / -1; grid-row: 5; }
+.sheet[data-theme="keyforge"] .page-play > .sec-xp { grid-column: 7 / -1; grid-row: 6; }
+
+/* Skills make room for Æffects only when the setting has them. */
+.sheet[data-theme="keyforge"] .page-play:has(> .sec-effects) > .sec-skills {
+  grid-column: 1 / 10;
+}
+
+/* Header: orange-brown labels on maroon rules. */
+.sheet[data-theme="keyforge"] .sec-header {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.sheet[data-theme="keyforge"] .name-label {
+  display: block;
+}
+
+.sheet[data-theme="keyforge"] .sheet-meta {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.sheet[data-theme="keyforge"] :is(.name-row, .sec-header .field-label) {
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: 6px;
+  border-bottom: 2px solid var(--k-maroon);
+}
+
+.sheet[data-theme="keyforge"] :is(.name-label, .sec-header .field-label > span) {
+  padding-bottom: 5px;
+  color: var(--k-label);
+  font-family: var(--k-display);
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: none;
+}
+
+.sheet[data-theme="keyforge"] :is(.name-label, .sec-header .field-label > span)::after {
+  content: ":";
+}
+
+.sheet[data-theme="keyforge"] .sheet-name {
+  height: 34px;
+  padding: 0 4px;
+  font-family: var(--k-serif);
+  font-size: 20px;
+}
+
+/* The rose band behind the characteristics and the stat boxes. */
+.sheet[data-theme="keyforge"] :is(.sec-characteristics, .sec-vehicle-stats) {
+  margin: 0 -30px;
+  padding: 10px 30px 0;
+  background: linear-gradient(transparent 0 46px, var(--k-maroon) 46px 49px, var(--k-band) 49px calc(100% - 3px), var(--k-maroon) calc(100% - 3px));
+}
+
+.sheet[data-theme="keyforge"] .sec-characteristics .sheet-banner {
+  display: none;
+}
+
+.sheet[data-theme="keyforge"] .characteristics {
+  gap: 20px;
+  padding: 0 10px;
+}
+
+.sheet[data-theme="keyforge"] .characteristic {
+  gap: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="keyforge"] .characteristic .number-field {
+  position: relative;
+  z-index: 1;
+  width: 84px;
+  height: 84px;
+  margin-bottom: -26px;
+  border: 4px solid var(--k-maroon);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--k-ink);
+  font-family: var(--k-display);
+  font-weight: 600;
+  font-size: 44px;
+}
+
+.sheet[data-theme="keyforge"] .characteristic-name {
+  width: 100%;
+  padding: 30px 0 10px;
+  border: 3px solid var(--k-maroon);
+  background: linear-gradient(160deg, var(--k-red-2), var(--k-red) 60%, #741a1d);
+  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+  color: var(--k-gold);
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 23px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Soak / Wound threshold / Strain threshold / M/R defense: red tab over a chamfered white box. */
+.sheet[data-theme="keyforge"] .page-play > .sec-derived {
+  margin: -14px -30px 0;
+  padding: 0 30px 6px;
+  background: linear-gradient(var(--k-band) 0 30px, var(--k-maroon) 30px 33px, transparent 33px);
+}
+
+.sheet[data-theme="keyforge"] .badges {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.sheet[data-theme="keyforge"] .badge {
+  gap: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="keyforge"] .badge-title {
+  position: relative;
+  z-index: 1;
+  padding: 5px 4px 4px;
+  border: 3px solid var(--k-maroon);
+  background: linear-gradient(160deg, var(--k-red-2), var(--k-red) 60%, #741a1d);
+  clip-path: polygon(2% 0, 100% 0, 98% 100%, 0 100%);
+  color: var(--k-gold);
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="keyforge"] .badge-cells {
+  gap: 0;
+  margin: -3px 4px 0;
+  overflow: hidden;
+  border: 3px solid var(--k-maroon);
+  border-top: 0;
+  border-radius: 0 0 22px 22px;
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .badge-cell {
+  justify-items: stretch;
+  gap: 0;
+}
+
+.sheet[data-theme="keyforge"] .badge-cell + .badge-cell {
+  border-left: 2px solid var(--k-maroon);
+}
+
+.sheet[data-theme="keyforge"] .badge-cell .stepper {
+  justify-content: center;
+}
+
+.sheet[data-theme="keyforge"] .badge-cell .number-field {
+  height: 54px;
+  font-family: var(--k-display);
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.sheet[data-theme="keyforge"] .badge-cell > .cell-label {
+  padding-bottom: 3px;
+  color: var(--k-label);
+  font-family: var(--k-display);
+  font-size: 11.5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="keyforge"] .step {
+  height: 54px;
+  background: transparent;
+  color: var(--muted);
+}
+
+/* Skills */
+.sheet[data-theme="keyforge"] .skill-columns {
+  gap: 0 18px;
+}
+
+.sheet[data-theme="keyforge"] .skill-column {
+  gap: 14px;
+}
+
+.sheet[data-theme="keyforge"] .skill-group {
+  padding: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="keyforge"] :is(.skill-group-head, .skill-row) {
+  grid-template-columns: minmax(0, 1fr) 44px 92px 52px;
+  column-gap: 4px;
+}
+
+.sheet[data-theme="keyforge"] .skill-group-head {
+  padding: 0 6px 3px;
+}
+
+.sheet[data-theme="keyforge"] .skill-group-head > span:first-child::after {
+  content: " skills";
+}
+
+.sheet[data-theme="keyforge"] .skill-group-head .muted {
+  color: var(--k-label);
+  font-size: 13.5px;
+}
+
+.sheet[data-theme="keyforge"] .skill-group-head .muted:nth-child(2)::after {
+  content: "?";
+}
+
+.sheet[data-theme="keyforge"] .skill-row {
+  min-height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--k-line);
+  border-top: 1px dotted var(--k-line);
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .skill-group-head + .skill-row {
+  border-top: 1px solid var(--k-line);
+}
+
+.sheet[data-theme="keyforge"] .skill-name {
+  color: var(--k-ink);
+  font-family: var(--k-serif);
+  font-size: 14.5px;
+  font-weight: 400;
+}
+
+.sheet[data-theme="keyforge"] .skill-name .muted {
+  color: var(--k-ink);
+  font-size: 14.5px;
+}
+
+.sheet[data-theme="keyforge"] .career-box {
+  border: 1px dotted var(--k-maroon);
+  border-radius: 1px;
+}
+
+.sheet[data-theme="keyforge"] .career-box:checked {
+  border-style: solid;
+  background: var(--k-red);
+}
+
+.sheet[data-theme="keyforge"] .career-box:checked::after {
+  border-color: var(--k-gold);
+}
+
+/* Rank: a pill of five chevrons, filled in red. */
+.sheet[data-theme="keyforge"] .pips {
+  gap: 0;
+  height: 14px;
+  padding: 0 6px;
+  border: 1.5px solid var(--k-maroon);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .pip {
+  width: 15px;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: #eadfdf;
+  clip-path: polygon(0 0, 62% 0, 100% 50%, 62% 100%, 0 100%, 38% 50%);
+  transform: none;
+}
+
+.sheet[data-theme="keyforge"] .pip[data-on="true"] {
+  background: var(--k-red);
+}
+
+.sheet[data-theme="keyforge"] .pip:hover {
+  background: #d4a9a9;
+}
+
+/* Æffects: thin boxes with Æffect and Type over Power. */
+.sheet[data-theme="keyforge"] .effect {
+  padding: 4px 8px 6px;
+  border: 1px solid var(--k-line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .effect-top {
+  border-bottom: 1px dotted var(--k-line);
+}
+
+.sheet[data-theme="keyforge"] .effect .sheet-area {
+  min-height: 60px;
+}
+
+/* Weapons: a ruled table with orange-brown column titles. */
+.sheet[data-theme="keyforge"] .weapons {
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--k-line);
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] :is(.weapons-head, .weapon) {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr 0.7fr 0.6fr 1fr 2.6fr 76px 32px;
+  align-items: center;
+  gap: 6px;
+}
+
+.sheet[data-theme="keyforge"] .weapons-head {
+  padding: 0 8px 2px;
+}
+
+.sheet[data-theme="keyforge"] .weapons-head > span:last-child {
+  grid-column: span 2;
+}
+
+.sheet[data-theme="keyforge"] .weapon {
+  padding: 2px 8px;
+  border: 0;
+  border-bottom: 1px dotted var(--k-line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="keyforge"] :is(.weapon-top, .weapon-stats) {
+  display: contents;
+}
+
+.sheet[data-theme="keyforge"] .weapon .field-label > span {
+  display: none;
+}
+
+.sheet[data-theme="keyforge"] .weapon-top .sheet-field { order: 1; }
+.sheet[data-theme="keyforge"] .weapon-stats > :nth-child(1) { order: 2; }
+.sheet[data-theme="keyforge"] .weapon-stats > :nth-child(2) { order: 3; }
+.sheet[data-theme="keyforge"] .weapon-stats > :nth-child(3) { order: 4; }
+.sheet[data-theme="keyforge"] .weapon-stats > :nth-child(4) { order: 5; }
+.sheet[data-theme="keyforge"] .weapon-stats > :nth-child(5) { order: 6; }
+.sheet[data-theme="keyforge"] .weapon > .field-label { order: 7; }
+.sheet[data-theme="keyforge"] .weapon-top .pool-button { order: 8; }
+.sheet[data-theme="keyforge"] .weapon-top .icon-button { order: 9; }
+
+/* Vehicle weapons add a firing arc column. */
+.sheet[data-theme="keyforge"] .sec-vehicle-weapons :is(.weapons-head, .weapon) {
+  grid-template-columns: 1.8fr 1.3fr 1fr 0.7fr 0.6fr 0.9fr 2.2fr 76px 32px;
+}
+
+/* Total XP and Available XP: two outlined boxes inside a maroon frame. */
+.sheet[data-theme="keyforge"] .sec-xp {
+  padding: 8px 14px;
+  border: 4px solid var(--k-maroon);
+}
+
+.sheet[data-theme="keyforge"] .sec-xp .xp-row {
+  gap: 14px;
+}
+
+.sheet[data-theme="keyforge"] .sec-xp .field-label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid var(--k-line);
+}
+
+.sheet[data-theme="keyforge"] .sec-xp .field-label > span::after {
+  content: ":";
+}
+
+.sheet[data-theme="keyforge"] .sec-xp .number-field {
+  height: 34px;
+  font-size: 18px;
+  text-align: left;
+}
+
+/* ---------- Page 2 ---------- */
+
+.sheet[data-theme="keyforge"] .page-story {
+  grid-template-columns: 2.1fr 1fr;
+  grid-template-areas:
+    "motivations description"
+    "equipment description"
+    "notes injuries"
+    "talents talents";
+  align-items: start;
+  gap: 14px 22px;
+}
+
+.sheet[data-theme="keyforge"] .page-story > .sec-motivations { grid-area: motivations; }
+.sheet[data-theme="keyforge"] .page-story > .sec-description { grid-area: description; align-self: stretch; }
+.sheet[data-theme="keyforge"] .page-story > .sec-equipment { grid-area: equipment; }
+.sheet[data-theme="keyforge"] .page-story > .sec-notes { grid-area: notes; align-self: stretch; }
+.sheet[data-theme="keyforge"] .page-story > .sec-injuries { grid-area: injuries; align-self: stretch; }
+.sheet[data-theme="keyforge"] .page-story > .sec-talents { grid-area: talents; }
+.sheet[data-theme="keyforge"] .page-story > .sec-heroic { grid-column: 1 / -1; }
+
+/* Inner boxes: thin outline with ruled lines, caption on the first rule. */
+.sheet[data-theme="keyforge"] :is(.sec-motivations, .sec-equipment, .sec-cargo) .story-grid > .field-label,
+.sheet[data-theme="keyforge"] :is(.sec-cargo, .sec-occupants, .sec-heroic) > .field-label,
+.sheet[data-theme="keyforge"] .sec-notes > .sheet-area {
+  align-content: start;
+  padding: 6px 8px;
+  border: 1px solid var(--k-line);
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .page-story .field-label > span::after,
+.sheet[data-theme="keyforge"] :is(.sec-cargo, .sec-occupants) .field-label > span::after {
+  content: ":";
+}
+
+.sheet[data-theme="keyforge"] :is(.page-story, .sec-cargo, .sec-occupants) .sheet-area {
+  background-image: repeating-linear-gradient(transparent 0 35px, rgb(184 138 120 / 0.7) 35px 36px);
+  background-attachment: local;
+  line-height: 36px;
+  font-family: var(--k-serif);
+  font-size: 15px;
+}
+
+.sheet[data-theme="keyforge"] .sec-motivations .sheet-area {
+  min-height: 72px;
+}
+
+.sheet[data-theme="keyforge"] .sec-equipment .sheet-area {
+  min-height: 144px;
+}
+
+.sheet[data-theme="keyforge"] .sec-notes > .sheet-area {
+  min-height: 220px;
+}
+
+/* Æmbits and Æmber sit under the personal gear. */
+.sheet[data-theme="keyforge"] .sec-equipment {
+  display: grid;
+}
+
+.sheet[data-theme="keyforge"] .sec-equipment .money-row {
+  order: 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-left: calc(50% + 4px);
+}
+
+.sheet[data-theme="keyforge"] .sec-equipment .money-row .field-label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  padding: 0 8px;
+  border: 1px solid var(--k-line);
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .money-row .number-field {
+  text-align: left;
+}
+
+/* Character description: one box of ruled labelled lines. */
+.sheet[data-theme="keyforge"] .sec-description .story-grid {
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 0;
+  height: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--k-line);
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .sec-description .field-label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px dotted var(--k-line);
+}
+
+.sheet[data-theme="keyforge"] .sec-description .field-label.span-all {
+  grid-template-columns: 1fr;
+  border-bottom: 0;
+}
+
+/* Critical injuries */
+.sheet[data-theme="keyforge"] .injury {
+  padding: 4px 6px;
+  border: 1px solid #9d9ccf;
+  background: #fff;
+}
+
+/* Talents and special abilities: ruled rows with an orange ▶ before the summary. */
+.sheet[data-theme="keyforge"] .talents-head {
+  display: grid;
+  grid-template-columns: 1.3fr 96px 4fr;
+  padding: 0 70px 0 8px;
+}
+
+.sheet[data-theme="keyforge"] .talents-head > span:last-child {
+  text-align: right;
+}
+
+.sheet[data-theme="keyforge"] .page-story > .sec-talents {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.sheet[data-theme="keyforge"] .sec-talents .talent-card {
+  grid-template-columns: 1.3fr 96px 4fr auto auto;
+  align-items: center;
+  gap: 0;
+  padding: 0 6px 0 2px;
+  border: 1px solid var(--k-line);
+  border-top: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .sec-talents .talents-head + .talent-card {
+  border-top: 1px solid var(--k-line);
+}
+
+.sheet[data-theme="keyforge"] .sec-talents :is(.talent-top, .talent-meta) {
+  display: contents;
+}
+
+.sheet[data-theme="keyforge"] .sec-talents .talent-card .field-label > span {
+  display: none;
+}
+
+.sheet[data-theme="keyforge"] .sec-talents .talent-top .sheet-field { order: 1; border-right: 1px dashed var(--k-maroon); }
+.sheet[data-theme="keyforge"] .sec-talents .talent-meta .field-label { order: 2; border-right: 1px solid var(--k-line); }
+.sheet[data-theme="keyforge"] .sec-talents .talent-card > .field-label { order: 3; position: relative; padding-left: 30px; }
+.sheet[data-theme="keyforge"] .sec-talents .tier-tag { order: 4; margin: 0 4px; background: rgb(142 31 34 / 0.1); color: var(--k-red); }
+.sheet[data-theme="keyforge"] .sec-talents .talent-top .icon-button { order: 5; }
+
+.sheet[data-theme="keyforge"] .sec-talents .talent-card > .field-label::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  width: 16px;
+  height: 18px;
+  transform: translateY(-50%);
+  background: #f39a2c;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.sheet[data-theme="keyforge"] .sec-talents .sheet-area {
+  min-height: 34px;
+  padding-top: 8px;
+  background-image: none;
+  line-height: 1.4;
+}
+
+.sheet[data-theme="keyforge"] .page-story > .sec-talents > .sheet-row {
+  margin-top: 10px;
+}
+
+/* ---------- Page 3 ---------- */
+
+.sheet[data-theme="keyforge"] .page-talents {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  align-items: start;
+  gap: 24px;
+}
+
+.sheet[data-theme="keyforge"] .page-talents > .sec-pyramid { grid-column: 1; grid-row: 1; }
+.sheet[data-theme="keyforge"] .page-talents > .sec-pyramid-info { grid-column: 2; grid-row: 1; }
+
+.sheet[data-theme="keyforge"] .pyramid-lead {
+  color: var(--k-ink);
+  font-family: var(--k-serif);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/* Tiers become columns, tier 1 on the left, sharing a baseline. */
+.sheet[data-theme="keyforge"] .pyramid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
+  gap: 14px;
+}
+
+.sheet[data-theme="keyforge"] .tier {
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 0;
+  border-left: 0;
+}
+
+.sheet[data-theme="keyforge"] .tier[aria-label^="Tier 1"] { grid-column: 1; }
+.sheet[data-theme="keyforge"] .tier[aria-label^="Tier 2"] { grid-column: 2; }
+.sheet[data-theme="keyforge"] .tier[aria-label^="Tier 3"] { grid-column: 3; }
+.sheet[data-theme="keyforge"] .tier[aria-label^="Tier 4"] { grid-column: 4; }
+.sheet[data-theme="keyforge"] .tier[aria-label^="Tier 5"] { grid-column: 5; }
+
+.sheet[data-theme="keyforge"] .tier-slots {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sheet[data-theme="keyforge"] .page-talents :is(.talent-slot, .talent-add) {
+  width: auto;
+}
+
+/* Tier labels: a red "5 XP" strip over a white chamfered "TIER 1" box. */
+.sheet[data-theme="keyforge"] .tier-head {
+  order: 2;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  text-align: center;
+}
+
+.sheet[data-theme="keyforge"] .tier-head .muted {
+  padding: 2px 0 1px;
+  border: 3px solid var(--k-maroon);
+  background: linear-gradient(160deg, var(--k-red-2), var(--k-red));
+  color: var(--k-gold);
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="keyforge"] .tier-name {
+  margin: -3px 0 0;
+  padding: 2px 0 4px;
+  border: 3px solid var(--k-maroon);
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  background: #fff;
+  color: var(--k-ink);
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+/* Talent cards: red header with "Talent" and a grey "Active?" corner. */
+.sheet[data-theme="keyforge"] .talent-slot {
+  position: relative;
+  gap: 2px;
+  min-height: 130px;
+  padding: 28px 6px 6px;
+  border: 3px solid var(--k-maroon);
+  border-radius: 0;
+  background: #fff;
+  box-shadow: 3px 3px 0 var(--k-maroon);
+}
+
+.sheet[data-theme="keyforge"] .talent-slot::before {
+  content: "Talent";
+  position: absolute;
+  inset: 0 0 auto 0;
+  padding: 2px 8px 3px;
+  background: linear-gradient(90deg, var(--k-red) 0 62%, var(--k-maroon) 62%);
+  color: var(--k-gold);
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="keyforge"] .talent-slot::after {
+  content: "Active?";
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  color: #d9d9d9;
+  font-family: var(--k-display);
+  font-style: italic;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="keyforge"] .talent-slot .sheet-field {
+  border-bottom: 2px solid var(--k-maroon);
+}
+
+.sheet[data-theme="keyforge"] .slot-meta {
+  margin-top: auto;
+}
+
+.sheet[data-theme="keyforge"] .talent-add {
+  min-height: 130px;
+  border: 2px dashed var(--k-line);
+  border-radius: 0;
+  background: #fbf7f7;
+}
+
+/* ---------- Spells ---------- */
+
+.sheet[data-theme="keyforge"] .spell {
+  border: 1px solid var(--k-line);
+  border-radius: 0;
+  background: #fff;
+}
+
+.sheet[data-theme="keyforge"] .spell-name {
+  color: var(--k-red);
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="keyforge"] .spell :is(.sheet-field, select.field) {
+  border-bottom: 1px dotted var(--k-line);
+}
+
+.sheet[data-theme="keyforge"] .spell .sheet-area {
+  min-height: 70px;
+  border: 1px solid var(--k-line);
+}
+
+.sheet[data-theme="keyforge"] .spells-lead {
+  color: var(--k-ink);
+  font-family: var(--k-serif);
+}
+
+/* ---------- Vehicle ---------- */
+
+.sheet[data-theme="keyforge"] .page-vehicle {
+  column-gap: 22px;
+  row-gap: 14px;
+}
+
+.sheet[data-theme="keyforge"] .sec-vehicle-header {
+  grid-column: 1 / 2;
+}
+
+.sheet[data-theme="keyforge"] .sec-vehicle-stats {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 30px;
+  row-gap: 10px;
+  padding-bottom: 14px;
+  background: linear-gradient(transparent 0 46px, var(--k-maroon) 46px 49px, var(--k-band) 49px calc(100% - 64px), var(--k-maroon) calc(100% - 64px) calc(100% - 61px), transparent calc(100% - 61px));
+}
+
+.sheet[data-theme="keyforge"] .sec-vehicle-stats > .vehicle-stats { grid-column: 1; grid-row: 1; }
+.sheet[data-theme="keyforge"] .sec-vehicle-stats > .vehicle-badges { grid-column: 1; grid-row: 2; grid-template-columns: repeat(3, 1fr); }
+.sheet[data-theme="keyforge"] .sec-vehicle-stats > .vehicle-defense { grid-column: 2; grid-row: 1 / 3; }
+
+.sheet[data-theme="keyforge"] .vehicle-stat .characteristic-name {
+  font-size: 20px;
+}
+
+.sheet[data-theme="keyforge"] .vehicle-badges .badge-title {
+  font-size: 19px;
+}
+
+.sheet[data-theme="keyforge"] .vehicle-badges .badge-cell .number-field {
+  height: 40px;
+  font-size: 24px;
+}
+
+.sheet[data-theme="keyforge"] .vehicle-badges .step {
+  height: 40px;
+}
+
+.sheet[data-theme="keyforge"] .vehicle-badges {
+  gap: 10px;
+}
+
+/* Defense: a thick maroon dial, red tab above. */
+.sheet[data-theme="keyforge"] .defense-title {
+  padding: 4px 18px;
+}
+
+.sheet[data-theme="keyforge"] .defense-dial {
+  border: 18px solid var(--k-maroon);
+  background:
+    linear-gradient(45deg, transparent calc(50% - 5px), var(--k-maroon) calc(50% - 5px) calc(50% + 5px), transparent calc(50% + 5px)),
+    linear-gradient(-45deg, transparent calc(50% - 5px), var(--k-maroon) calc(50% - 5px) calc(50% + 5px), transparent calc(50% + 5px)),
+    #fff;
+}
+
+.sheet[data-theme="keyforge"] .zone .number-field {
+  font-family: var(--k-display);
+  font-weight: 600;
+  font-size: 22px;
+  background: #fff;
+}
+
+/* Narrow windows: stack. */
+@media (max-width: 900px) {
+  .sheet[data-theme="keyforge"] .page-play > .sheet-section,
+  .sheet[data-theme="keyforge"] .page-play:has(> .sec-effects) > .sec-skills {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .sheet[data-theme="keyforge"] .badges {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sheet[data-theme="keyforge"] .characteristics {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 18px;
+  }
+
+  .sheet[data-theme="keyforge"] .page-story {
+    grid-template-columns: 1fr;
+    grid-template-areas: "motivations" "description" "equipment" "notes" "injuries" "talents";
+  }
+
+  .sheet[data-theme="keyforge"] .page-talents {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet[data-theme="keyforge"] .page-talents > .sec-pyramid-info {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .sheet[data-theme="keyforge"] .weapons-head {
+    display: none;
+  }
+
+  .sheet[data-theme="keyforge"] .weapon {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sheet[data-theme="keyforge"] .sec-equipment .money-row {
+    margin-left: 0;
+  }
+}
+
+/* ---------- Dice tray ---------- */
+
+.tray[data-theme="keyforge"] :is(.panel, .launcher),
+.results[data-theme="keyforge"] .result {
+  border: 3px solid var(--k-maroon);
+  background: var(--k-paper);
+}
+
+.tray[data-theme="keyforge"] .panel-head {
+  background: var(--k-maroon);
+}
+
+.tray[data-theme="keyforge"] .panel-head :is(.title, .icon-button, .grip) {
+  color: var(--k-gold);
+}
+
+.tray[data-theme="keyforge"] .title {
+  font-family: var(--k-display);
+  font-style: italic;
+  font-weight: 700;
+  text-transform: uppercase;
+}

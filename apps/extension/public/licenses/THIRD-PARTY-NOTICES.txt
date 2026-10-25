@@ -1,0 +1,41 @@
+Genesys Overlay: third-party notices
+=====================================
+
+Genesys Overlay is an unofficial, fan-made tool. It is not affiliated with,
+endorsed by, or sponsored by Fantasy Flight Games, Edge Studio or Asmodee.
+Genesys, Realms of Terrinoth and KeyForge are trademarks of their respective
+owners and are used here only to describe which game the tool works with.
+No artwork, logos or text from the official character sheets are included;
+the sheet themes are drawn with CSS.
+
+Genesys Overlay's own code is MIT licensed, copyright 2026 Genesys Overlay contributors.
+The files below keep their own licenses.
+
+
+Genesys dice symbol font (dice faces and result symbols)
+---------------------------------------------------------
+File: genesys.woff2, embedded in content.js
+Copyright: the authors of D1SoveR/genesys-dice-roller
+License: GNU General Public License, version 3 (see GPL-3.0.txt)
+Source: https://github.com/D1SoveR/genesys-dice-roller
+The font is included unmodified. Its corresponding source is available at
+the address above. You may redistribute and modify it under the terms of
+the GPL version 3.
+
+
+Barlow and Barlow Condensed (interface text)
+--------------------------------------------
+Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow)
+License: SIL Open Font License, version 1.1 (see OFL-1.1-Barlow.txt)
+
+
+three.js (3D dice)
+------------------
+Copyright 2010-2026 three.js authors
+License: MIT (see MIT-three.txt)
+
+
+cannon-es (dice physics)
+------------------------
+Copyright 2015 cannon.js Authors
+License: MIT (see MIT-cannon-es.txt)

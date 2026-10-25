@@ -1,0 +1,1005 @@
+/* =========================================================================
+   Terrinoth theme: recreates the look of the Realms of Terrinoth character
+   sheets (aged parchment with darker edges, dark brown banners and outlines,
+   rust-orange captions, serif small capitals, brown-ringed characteristic
+   circles, Total and Available XP badges at the foot of page 1, brown-headed
+   talent cards). Built from CSS only; no artwork or logo from the printed
+   sheets is used.
+   ========================================================================= */
+
+/* The dice tray and roll results wear the sheet's theme too. */
+.sheet[data-theme="terrinoth"],
+.tray[data-theme="terrinoth"],
+.results[data-theme="terrinoth"] {
+  --t-paper: #ead9b8;
+  --t-paper-edge: #c99f6b;
+  --t-brown: #4a2e1c;
+  --t-brown-2: #6b4429;
+  --t-rust: #c1532b;
+  --t-ink: #2e1f14;
+  --t-line: #6b4a33;
+  --t-box: rgb(255 251 242 / 0.55);
+  --t-serif: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+
+  --felt: var(--t-paper);
+  --raised: #fbf5e8;
+  --raised-hover: #f6eedb;
+  --rim: #a07c5b;
+  --text: var(--t-ink);
+  --muted: #6e5541;
+  --orange: var(--t-rust);
+  --orange-hover: #d1643a;
+  --orange-ink: #ffffff;
+  --good: var(--t-rust);
+  --bad: #9c2a1a;
+  --focus: #1f6fd1;
+  --well: var(--t-box);
+  --well-deep: rgb(255 251 242 / 0.75);
+  --hairline: rgb(74 46 28 / 0.2);
+  --hover-tint: rgb(74 46 28 / 0.07);
+  --shadow: 0 24px 60px -16px rgb(20 10 4 / 0.55), 0 2px 8px rgb(20 10 4 / 0.25);
+  --felt-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Parchment that darkens toward the edges, like the printed page. */
+.sheet[data-theme="terrinoth"] .sheet-panel {
+  background:
+    var(--felt-texture),
+    radial-gradient(ellipse at 50% 45%, #f3e6cc 0%, var(--t-paper) 55%, var(--t-paper-edge) 100%);
+}
+
+.sheet[data-theme="terrinoth"] .sheet-head {
+  background: rgb(74 46 28 / 0.08);
+  border-bottom-color: rgb(74 46 28 / 0.25);
+}
+
+.sheet[data-theme="terrinoth"] .sheet-head .title {
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  color: var(--t-brown);
+}
+
+.sheet[data-theme="terrinoth"] .sheet-tab {
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  font-weight: 600;
+}
+
+.sheet[data-theme="terrinoth"] .sheet-tab[aria-selected="true"] {
+  border-color: var(--t-brown);
+  background: var(--t-brown);
+  color: #f7ecd6;
+}
+
+.sheet[data-theme="terrinoth"] .sheet-scroll {
+  padding: 18px 30px 26px;
+  font-family: var(--t-serif);
+}
+
+.sheet[data-theme="terrinoth"] .sheet-section {
+  border-bottom: 0;
+}
+
+.sheet[data-theme="terrinoth"] :is(.sheet-field, .number-field, select.field) {
+  border-color: transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--t-ink);
+  font-family: var(--t-serif);
+}
+
+.sheet[data-theme="terrinoth"] :is(.sheet-field, .number-field, select.field):hover {
+  border-color: var(--rim);
+}
+
+/* Captions: rust small capitals, like "Strength:" and "General Skills". */
+.sheet[data-theme="terrinoth"] :is(.field-label > span, .skill-group-head, .weapons-head, .talents-head, .spell-options-title) {
+  color: var(--t-rust);
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* Section titles: large brown small capitals, right-aligned. */
+.sheet[data-theme="terrinoth"] .sheet-heading:not(.sheet-banner) {
+  justify-self: end;
+  color: var(--t-brown);
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  font-weight: 400;
+  font-size: 21px;
+  letter-spacing: 0.02em;
+}
+
+/* Dark brown tabs: Characteristics, Skills, Weapons. */
+.sheet[data-theme="terrinoth"] .sheet-banner {
+  display: block;
+  justify-self: center;
+  width: 250px;
+  margin: 0 auto;
+  padding: 3px 0 4px;
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(var(--t-brown-2), var(--t-brown));
+  clip-path: polygon(5% 0, 95% 0, 100% 100%, 0 100%);
+  color: #f7ecd6;
+  font-family: var(--t-serif);
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+/* ---------- Page 1 ---------- */
+
+.sheet[data-theme="terrinoth"] .page-play {
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 24px;
+}
+
+.sheet[data-theme="terrinoth"] .page-play > .sec-header { grid-column: 1 / 8; grid-row: 1; }
+.sheet[data-theme="terrinoth"] .page-play > .sec-derived { grid-column: 1 / -1; grid-row: 2; }
+.sheet[data-theme="terrinoth"] .page-play > .sec-characteristics { grid-column: 1 / -1; grid-row: 3; }
+.sheet[data-theme="terrinoth"] .page-play > .sec-skills { grid-column: 1 / -1; grid-row: 4; }
+.sheet[data-theme="terrinoth"] .page-play > .sec-weapons { grid-column: 1 / -1; grid-row: 5; }
+.sheet[data-theme="terrinoth"] .page-play > .sec-xp { grid-column: 1 / -1; grid-row: 6; }
+
+/* Header: serif labels on ruled lines. */
+.sheet[data-theme="terrinoth"] .sec-header {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.sheet[data-theme="terrinoth"] .name-label {
+  display: block;
+}
+
+.sheet[data-theme="terrinoth"] .sheet-meta {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.sheet[data-theme="terrinoth"] :is(.name-row, .sec-header .field-label) {
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: 6px;
+  border-bottom: 1.5px solid var(--t-brown);
+}
+
+.sheet[data-theme="terrinoth"] :is(.name-label, .sec-header .field-label > span) {
+  padding-bottom: 5px;
+  color: var(--t-ink);
+  font-family: var(--t-serif);
+  font-variant: normal;
+  font-size: 18px;
+}
+
+.sheet[data-theme="terrinoth"] :is(.name-label, .sec-header .field-label > span)::after {
+  content: ":";
+}
+
+.sheet[data-theme="terrinoth"] .sheet-name {
+  height: 36px;
+  padding: 0 4px;
+  font-family: var(--t-serif);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* Soak / Wounds / Strain / Defense: brown tab, white box, brown and rust captions. */
+.sheet[data-theme="terrinoth"] .badges {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.sheet[data-theme="terrinoth"] .badge {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 5px solid var(--t-brown);
+  border-right-color: var(--t-rust);
+  border-radius: 18px 18px 40px 40px;
+  background: #fffaf0;
+}
+
+.sheet[data-theme="terrinoth"] .badge:first-child {
+  border-color: var(--t-brown);
+}
+
+.sheet[data-theme="terrinoth"] .badge-title {
+  padding: 5px 4px 6px;
+  background: var(--t-brown);
+  clip-path: polygon(0 0, 100% 0, 92% 100%, 8% 100%);
+  color: #f7ecd6;
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  font-weight: 400;
+  font-size: 21px;
+}
+
+.sheet[data-theme="terrinoth"] .badge-cells {
+  gap: 0;
+}
+
+.sheet[data-theme="terrinoth"] .badge-cell {
+  justify-items: stretch;
+  gap: 0;
+  color: #f7ecd6;
+}
+
+.sheet[data-theme="terrinoth"] .badge-cell + .badge-cell {
+  border-left: 2px solid var(--t-brown);
+}
+
+.sheet[data-theme="terrinoth"] .badge-cell .stepper {
+  justify-content: center;
+}
+
+.sheet[data-theme="terrinoth"] .badge-cell .number-field {
+  height: 56px;
+  font-family: var(--t-serif);
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.sheet[data-theme="terrinoth"] .badge-cell > .cell-label {
+  align-self: stretch;
+  padding: 2px 0 3px;
+  background: var(--t-brown);
+  font-family: var(--t-serif);
+  font-size: 13px;
+  text-align: center;
+}
+
+.sheet[data-theme="terrinoth"] .badge-cell:last-child:not(:only-child) > .cell-label {
+  background: var(--t-rust);
+}
+
+.sheet[data-theme="terrinoth"] .badge-cell:only-child > .cell-label {
+  color: transparent;
+}
+
+/* Defense reads Ranged then Melee on the printed sheet. */
+.sheet[data-theme="terrinoth"] .badge:nth-child(4) .badge-cell:first-child {
+  order: 2;
+  border-left: 2px solid var(--t-brown);
+}
+
+.sheet[data-theme="terrinoth"] .badge:nth-child(4) .badge-cell:first-child > .cell-label {
+  background: var(--t-rust);
+}
+
+.sheet[data-theme="terrinoth"] .badge:nth-child(4) .badge-cell:last-child {
+  border-left: 0;
+}
+
+.sheet[data-theme="terrinoth"] .badge:nth-child(4) .badge-cell:last-child > .cell-label {
+  background: var(--t-brown);
+}
+
+.sheet[data-theme="terrinoth"] .step {
+  height: 56px;
+  background: transparent;
+  color: var(--muted);
+}
+
+/* Characteristics: white numbers in brown rings, names on rust strips. */
+.sheet[data-theme="terrinoth"] .characteristics {
+  gap: 16px;
+  padding: 10px 0 6px;
+}
+
+.sheet[data-theme="terrinoth"] .characteristic {
+  gap: 0;
+  padding: 10px 0 0;
+  border-radius: 42% 42% 10px 10px / 34% 34% 10px 10px;
+  background: linear-gradient(var(--t-brown-2), var(--t-brown) 64%, var(--t-rust) 64%);
+  box-shadow: 0 2px 0 rgb(46 31 20 / 0.35);
+}
+
+.sheet[data-theme="terrinoth"] .characteristic .number-field {
+  width: 88px;
+  height: 88px;
+  border: 6px solid var(--t-brown);
+  border-radius: 50%;
+  outline: 2px solid #fffaf0;
+  outline-offset: -10px;
+  background: #fffaf0;
+  color: var(--t-ink);
+  font-family: var(--t-serif);
+  font-weight: 400;
+  font-size: 48px;
+}
+
+.sheet[data-theme="terrinoth"] .characteristic-name {
+  width: 100%;
+  padding: 6px 0 7px;
+  color: #fbeee0;
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* Skills: thin brown tables with dotted rows, rust captions. */
+.sheet[data-theme="terrinoth"] .skill-columns {
+  gap: 0 26px;
+}
+
+.sheet[data-theme="terrinoth"] .skill-column {
+  gap: 16px;
+}
+
+.sheet[data-theme="terrinoth"] .skill-group {
+  padding: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="terrinoth"] :is(.skill-group-head, .skill-row) {
+  grid-template-columns: 1fr 54px 136px 70px;
+}
+
+.sheet[data-theme="terrinoth"] .skill-group-head {
+  padding: 2px 6px 3px;
+  font-size: 13.5px;
+}
+
+.sheet[data-theme="terrinoth"] .skill-group-head > span:first-child::after {
+  content: " skills";
+}
+
+.sheet[data-theme="terrinoth"] .skill-group-head .muted {
+  color: var(--t-rust);
+  font-family: var(--t-serif);
+  font-size: 13.5px;
+}
+
+.sheet[data-theme="terrinoth"] .skill-row {
+  min-height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--t-line);
+  border-top: 1px dotted rgb(107 74 51 / 0.6);
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] .skill-group-head + .skill-row {
+  border-top: 1px solid var(--t-line);
+}
+
+.sheet[data-theme="terrinoth"] .skill-name {
+  color: var(--t-ink);
+  font-family: var(--t-serif);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.sheet[data-theme="terrinoth"] .skill-name .muted {
+  color: var(--t-ink);
+  font-size: 15px;
+}
+
+.sheet[data-theme="terrinoth"] .career-box {
+  border: 1px dotted var(--t-line);
+  border-radius: 1px;
+}
+
+.sheet[data-theme="terrinoth"] .career-box:checked {
+  border-style: solid;
+  border-color: var(--t-brown);
+  background: var(--t-brown);
+}
+
+.sheet[data-theme="terrinoth"] .career-box:checked::after {
+  border-color: #fffaf0;
+}
+
+/* Rank: a pill of five chevrons, filled in rust. */
+.sheet[data-theme="terrinoth"] .pips {
+  gap: 0;
+  height: 16px;
+  padding: 0 8px;
+  border: 1.5px solid var(--t-ink);
+  border-radius: 999px;
+  background: #fffaf0;
+}
+
+.sheet[data-theme="terrinoth"] .pip {
+  width: 22px;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: #e6d6bb;
+  clip-path: polygon(0 0, 62% 0, 100% 50%, 62% 100%, 0 100%, 38% 50%);
+  transform: none;
+}
+
+.sheet[data-theme="terrinoth"] .pip[data-on="true"] {
+  background: var(--t-rust);
+}
+
+.sheet[data-theme="terrinoth"] .pip:hover {
+  background: #c9a98a;
+}
+
+/* Weapons: a thin brown table with rust column titles. */
+.sheet[data-theme="terrinoth"] .weapons {
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--t-line);
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] .weapons-head,
+.sheet[data-theme="terrinoth"] .weapon {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 0.7fr 0.6fr 1.1fr 2.4fr 80px 32px;
+  align-items: center;
+  gap: 6px;
+}
+
+.sheet[data-theme="terrinoth"] .weapons-head {
+  padding: 0 8px 2px;
+  font-size: 13.5px;
+}
+
+.sheet[data-theme="terrinoth"] .weapons-head > span:last-child {
+  grid-column: span 2;
+}
+
+.sheet[data-theme="terrinoth"] .weapon {
+  padding: 2px 8px;
+  border: 0;
+  border-bottom: 1px dotted rgb(107 74 51 / 0.6);
+  border-radius: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="terrinoth"] :is(.weapon-top, .weapon-stats) {
+  display: contents;
+}
+
+.sheet[data-theme="terrinoth"] .weapon .field-label > span {
+  display: none;
+}
+
+.sheet[data-theme="terrinoth"] .weapon-top .sheet-field { order: 1; }
+.sheet[data-theme="terrinoth"] .weapon-stats > :nth-child(1) { order: 2; }
+.sheet[data-theme="terrinoth"] .weapon-stats > :nth-child(2) { order: 3; }
+.sheet[data-theme="terrinoth"] .weapon-stats > :nth-child(3) { order: 4; }
+.sheet[data-theme="terrinoth"] .weapon-stats > :nth-child(4) { order: 5; }
+.sheet[data-theme="terrinoth"] .weapon > .field-label { order: 6; }
+.sheet[data-theme="terrinoth"] .weapon-top .pool-button { order: 7; }
+.sheet[data-theme="terrinoth"] .weapon-top .icon-button { order: 8; }
+
+/* Total XP and Available XP: white badges with brown captions, bottom corners. */
+.sheet[data-theme="terrinoth"] .sec-xp .xp-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sheet[data-theme="terrinoth"] .sec-xp .field-label {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  width: 230px;
+  overflow: hidden;
+  border: 5px solid var(--t-brown);
+  border-radius: 46px 46px 14px 14px;
+  background: #fffaf0;
+}
+
+.sheet[data-theme="terrinoth"] .sec-xp .field-label > span {
+  padding: 3px 0 5px;
+  background: var(--t-brown);
+  color: #f7ecd6;
+  font-variant: normal;
+  font-size: 20px;
+  text-align: center;
+}
+
+.sheet[data-theme="terrinoth"] .sec-xp .number-field {
+  height: 64px;
+  font-family: var(--t-serif);
+  font-size: 34px;
+}
+
+/* ---------- Page 2 ---------- */
+
+.sheet[data-theme="terrinoth"] .page-story {
+  grid-template-columns: 1.6fr 1fr;
+  grid-template-areas:
+    "motivations description"
+    "equipment notes"
+    "heroic injuries"
+    "talents talents";
+  gap: 14px 24px;
+}
+
+.sheet[data-theme="terrinoth"] .page-story > .sec-motivations { grid-area: motivations; }
+.sheet[data-theme="terrinoth"] .page-story > .sec-description { grid-area: description; }
+.sheet[data-theme="terrinoth"] .page-story > .sec-equipment { grid-area: equipment; }
+.sheet[data-theme="terrinoth"] .page-story > .sec-heroic { grid-area: heroic; }
+.sheet[data-theme="terrinoth"] .page-story > .sec-notes { grid-area: notes; }
+.sheet[data-theme="terrinoth"] .page-story > .sec-injuries { grid-area: injuries; }
+.sheet[data-theme="terrinoth"] .page-story > .sec-talents { grid-area: talents; }
+
+/* Boxes: brown outline, translucent paper, rust caption. */
+.sheet[data-theme="terrinoth"] :is(.sec-motivations, .sec-equipment) .story-grid > .field-label,
+.sheet[data-theme="terrinoth"] .sec-notes > .sheet-area {
+  align-content: start;
+  padding: 6px 10px;
+  border: 1.5px solid var(--t-line);
+  border-radius: 0;
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] :is(.sec-motivations, .sec-equipment, .sec-heroic) .field-label > span {
+  font-size: 15px;
+}
+
+.sheet[data-theme="terrinoth"] :is(.sec-motivations, .sec-equipment, .sec-heroic) .field-label > span::after {
+  content: ":";
+}
+
+.sheet[data-theme="terrinoth"] .sec-motivations .sheet-area {
+  min-height: 80px;
+}
+
+.sheet[data-theme="terrinoth"] .sec-equipment .sheet-area {
+  min-height: 150px;
+}
+
+.sheet[data-theme="terrinoth"] .sec-notes > .sheet-area {
+  min-height: 220px;
+}
+
+.sheet[data-theme="terrinoth"] .sheet-area {
+  font-family: var(--t-serif);
+  font-size: 15px;
+}
+
+/* Money (Silver) sits under the gear, inside the equipment box. */
+.sheet[data-theme="terrinoth"] .sec-equipment {
+  display: grid;
+}
+
+.sheet[data-theme="terrinoth"] .sec-equipment .money-row {
+  order: 3;
+  grid-template-columns: 1fr 1fr;
+}
+
+.sheet[data-theme="terrinoth"] .sec-equipment .money-row .field-label {
+  grid-column: 2;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  padding: 2px 10px;
+  border: 1.5px solid var(--t-line);
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] .sec-equipment .money-row .field-label > span::after {
+  content: ":";
+}
+
+.sheet[data-theme="terrinoth"] .money-row .number-field {
+  text-align: left;
+}
+
+/* Character description: a two-column ruled table. */
+.sheet[data-theme="terrinoth"] .sec-description .story-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1.5px solid var(--t-line);
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] .sec-description .field-label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--t-line);
+}
+
+.sheet[data-theme="terrinoth"] .sec-description .field-label:nth-child(odd):not(.span-all) {
+  border-right: 1px solid var(--t-line);
+}
+
+.sheet[data-theme="terrinoth"] .sec-description .field-label.span-all {
+  grid-template-columns: 1fr;
+  border-bottom: 0;
+}
+
+.sheet[data-theme="terrinoth"] .sec-description .field-label > span {
+  color: var(--t-ink);
+  font-variant: normal;
+  font-size: 14px;
+}
+
+.sheet[data-theme="terrinoth"] .sec-description .field-label > span::after {
+  content: ":";
+}
+
+/* Heroic ability: one outlined box with the points along its foot. */
+.sheet[data-theme="terrinoth"] .sec-heroic {
+  padding: 0;
+}
+
+.sheet[data-theme="terrinoth"] .sec-heroic > .heroic-grid,
+.sheet[data-theme="terrinoth"] .sec-heroic > .field-label,
+.sheet[data-theme="terrinoth"] .sec-heroic > .heroic-points {
+  margin: 0;
+  padding: 6px 10px;
+  border: 1.5px solid var(--t-line);
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] .sec-heroic > .field-label {
+  border-top: 0;
+}
+
+.sheet[data-theme="terrinoth"] .sec-heroic > .heroic-points {
+  gap: 0;
+  padding: 0;
+  border-top: 0;
+}
+
+.sheet[data-theme="terrinoth"] .heroic-points .field-label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  padding: 4px 10px;
+}
+
+.sheet[data-theme="terrinoth"] .heroic-points .field-label + .field-label {
+  border-left: 1.5px solid var(--t-line);
+}
+
+.sheet[data-theme="terrinoth"] :is(.heroic-grid, .heroic-points) .field-label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.sheet[data-theme="terrinoth"] .sec-heroic .sec-heroic {
+  gap: 0;
+}
+
+/* Critical injuries */
+.sheet[data-theme="terrinoth"] .injury {
+  padding: 4px 6px;
+  border: 1px solid var(--t-line);
+  background: var(--t-box);
+}
+
+/* Talents and special abilities: ruled rows with a ▷ before the summary. */
+.sheet[data-theme="terrinoth"] .talents-head {
+  display: grid;
+  grid-template-columns: 1.3fr 96px 4fr;
+  padding: 0 70px 0 10px;
+  font-size: 13px;
+}
+
+.sheet[data-theme="terrinoth"] .talents-head > span:last-child {
+  text-align: right;
+}
+
+.sheet[data-theme="terrinoth"] .page-story > .sec-talents {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.sheet[data-theme="terrinoth"] .sec-talents .talent-card {
+  grid-template-columns: 1.3fr 96px 4fr auto auto;
+  align-items: center;
+  gap: 0;
+  padding: 0 6px 0 2px;
+  border: 1.5px solid var(--t-line);
+  border-radius: 0;
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] .sec-talents :is(.talent-top, .talent-meta) {
+  display: contents;
+}
+
+.sheet[data-theme="terrinoth"] .sec-talents .talent-card .field-label > span {
+  display: none;
+}
+
+.sheet[data-theme="terrinoth"] .sec-talents .talent-top .sheet-field { order: 1; border-right: 1px solid var(--t-line); border-radius: 0; }
+.sheet[data-theme="terrinoth"] .sec-talents .talent-meta .field-label { order: 2; border-right: 1px solid var(--t-line); }
+.sheet[data-theme="terrinoth"] .sec-talents .talent-card > .field-label { order: 3; position: relative; padding-left: 22px; }
+.sheet[data-theme="terrinoth"] .sec-talents .tier-tag { order: 4; margin: 0 4px; background: rgb(193 83 43 / 0.14); color: var(--t-rust); }
+.sheet[data-theme="terrinoth"] .sec-talents .talent-top .icon-button { order: 5; }
+
+.sheet[data-theme="terrinoth"] .sec-talents .talent-card > .field-label::before {
+  content: "▷";
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--t-ink);
+}
+
+.sheet[data-theme="terrinoth"] .sec-talents .sheet-area {
+  min-height: 32px;
+  padding-top: 7px;
+}
+
+/* ---------- Page 3 ---------- */
+
+.sheet[data-theme="terrinoth"] .page-talents {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  align-items: start;
+  gap: 24px;
+}
+
+.sheet[data-theme="terrinoth"] .page-talents > .sec-pyramid { grid-column: 1; grid-row: 1; }
+
+.sheet[data-theme="terrinoth"] .page-talents > .sec-pyramid-info {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: rgb(255 251 242 / 0.6);
+}
+
+.sheet[data-theme="terrinoth"] .page-talents .sec-pyramid-info .sheet-heading {
+  justify-self: center;
+  color: var(--t-rust);
+}
+
+.sheet[data-theme="terrinoth"] .pyramid-lead {
+  color: var(--t-ink);
+  font-family: var(--t-serif);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+/* Tiers become columns, tier 1 on the left, sharing a baseline. */
+.sheet[data-theme="terrinoth"] .pyramid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
+  gap: 14px;
+}
+
+.sheet[data-theme="terrinoth"] .tier {
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 0;
+  border-left: 0;
+}
+
+.sheet[data-theme="terrinoth"] .tier[aria-label^="Tier 1"] { grid-column: 1; }
+.sheet[data-theme="terrinoth"] .tier[aria-label^="Tier 2"] { grid-column: 2; }
+.sheet[data-theme="terrinoth"] .tier[aria-label^="Tier 3"] { grid-column: 3; }
+.sheet[data-theme="terrinoth"] .tier[aria-label^="Tier 4"] { grid-column: 4; }
+.sheet[data-theme="terrinoth"] .tier[aria-label^="Tier 5"] { grid-column: 5; }
+
+.sheet[data-theme="terrinoth"] .tier-slots {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sheet[data-theme="terrinoth"] .page-talents .talent-slot,
+.sheet[data-theme="terrinoth"] .page-talents .talent-add {
+  width: auto;
+}
+
+/* Tier labels: brown tabs at the foot of each column. */
+.sheet[data-theme="terrinoth"] .tier-head {
+  order: 2;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  width: 70%;
+  margin: 0 auto;
+  padding: 3px 0 4px;
+  border-radius: 4px;
+  background: var(--t-brown);
+  clip-path: polygon(8% 0, 92% 0, 100% 50%, 92% 100%, 8% 100%, 0 50%);
+  color: #f7ecd6;
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  text-align: center;
+}
+
+.sheet[data-theme="terrinoth"] .tier-name {
+  font-weight: 400;
+  font-size: 17px;
+}
+
+.sheet[data-theme="terrinoth"] .tier-head .muted {
+  color: #f7ecd6;
+  font-size: 13px;
+}
+
+/* Talent cards: brown header with a rust "Active?" corner. */
+.sheet[data-theme="terrinoth"] .talent-slot {
+  position: relative;
+  gap: 2px;
+  min-height: 130px;
+  padding: 28px 6px 6px;
+  border: 3px solid var(--t-brown);
+  border-radius: 4px;
+  background: rgb(255 251 242 / 0.7);
+}
+
+.sheet[data-theme="terrinoth"] .talent-slot::before {
+  content: "Talent";
+  position: absolute;
+  inset: 0 0 auto 0;
+  padding: 2px 8px 3px;
+  background: linear-gradient(90deg, var(--t-brown) 0 62%, var(--t-rust) 62%);
+  color: #f7ecd6;
+  font-family: var(--t-serif);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sheet[data-theme="terrinoth"] .talent-slot::after {
+  content: "Active?";
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  color: #fbeee0;
+  font-family: var(--t-serif);
+  font-size: 13px;
+}
+
+.sheet[data-theme="terrinoth"] .talent-slot .sheet-field {
+  border-bottom: 1px solid var(--t-line);
+  border-radius: 0;
+}
+
+.sheet[data-theme="terrinoth"] .slot-meta {
+  margin-top: auto;
+}
+
+.sheet[data-theme="terrinoth"] .slot-active .career-box {
+  border: 1.5px dashed var(--t-rust);
+  border-radius: 50%;
+}
+
+.sheet[data-theme="terrinoth"] .talent-add {
+  min-height: 130px;
+  border: 2px dashed var(--t-line);
+  border-radius: 4px;
+  background: rgb(255 251 242 / 0.35);
+}
+
+/* ---------- Spells ---------- */
+
+.sheet[data-theme="terrinoth"] .sec-spells-intro .sheet-heading {
+  justify-self: center;
+  color: #7a1f12;
+  font-size: 34px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-variant: normal;
+}
+
+.sheet[data-theme="terrinoth"] .spells-lead {
+  color: var(--t-ink);
+  font-family: var(--t-serif);
+  font-size: 15px;
+}
+
+.sheet[data-theme="terrinoth"] .spell {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="terrinoth"] .spell-name {
+  color: #7a1f12;
+  font-family: var(--t-serif);
+  font-weight: 400;
+  font-size: 24px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="terrinoth"] .spell .field-label > span {
+  color: var(--t-ink);
+  font-variant: normal;
+  font-weight: 700;
+}
+
+.sheet[data-theme="terrinoth"] .spell-options-title {
+  justify-self: center;
+  color: #7a1f12;
+  font-size: 17px;
+  text-transform: uppercase;
+  font-variant: normal;
+}
+
+/* Narrow windows: stack. */
+@media (max-width: 900px) {
+  .sheet[data-theme="terrinoth"] .page-play > .sheet-section {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .sheet[data-theme="terrinoth"] .badges {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sheet[data-theme="terrinoth"] .characteristics {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 18px;
+  }
+
+  .sheet[data-theme="terrinoth"] .page-story {
+    grid-template-columns: 1fr;
+    grid-template-areas: "motivations" "description" "equipment" "notes" "heroic" "injuries" "talents";
+  }
+
+  .sheet[data-theme="terrinoth"] .page-talents {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet[data-theme="terrinoth"] .page-talents > .sec-pyramid-info {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .sheet[data-theme="terrinoth"] .weapons-head {
+    display: none;
+  }
+
+  .sheet[data-theme="terrinoth"] .weapon {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sheet[data-theme="terrinoth"] .sec-xp .field-label {
+    width: 45%;
+  }
+}
+
+/* Spell fields need an outline on parchment, or they vanish. */
+.sheet[data-theme="terrinoth"] .spell :is(.sheet-field, select.field) {
+  border-bottom: 1px solid var(--t-line);
+  border-radius: 0;
+}
+
+.sheet[data-theme="terrinoth"] .spell .sheet-area {
+  min-height: 70px;
+  border: 1.5px solid var(--t-line);
+  background: var(--t-box);
+}
+
+.sheet[data-theme="terrinoth"] .spell + .spell {
+  border-top: 1.5px solid rgb(122 31 18 / 0.35);
+}
+
+/* ---------- Dice tray ---------- */
+
+.tray[data-theme="terrinoth"] :is(.panel, .launcher),
+.results[data-theme="terrinoth"] .result {
+  border-color: var(--t-brown-2);
+  background:
+    var(--felt-texture),
+    radial-gradient(ellipse at 50% 40%, #f3e6cc 0%, var(--t-paper) 60%, var(--t-paper-edge) 100%);
+}
+
+.tray[data-theme="terrinoth"] .panel-head {
+  background: var(--t-brown);
+}
+
+.tray[data-theme="terrinoth"] .panel-head :is(.title, .icon-button, .grip) {
+  color: #f7ecd6;
+}
+
+.tray[data-theme="terrinoth"] .title {
+  font-family: var(--t-serif);
+  font-variant: small-caps;
+  font-weight: 400;
+}

@@ -1,0 +1,13 @@
+node_modules/
+dist/
+release/
+.wrangler/
+.dev.vars
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# Extension signing key: keeps the extension ID stable. Never commit it.
+*.pem

@@ -1,0 +1,27 @@
+{
+  "name": "@genesys/host",
+  "private": true,
+  "type": "module",
+  "description": "GM host companion: runs the multiplayer session on the GM's computer and shares it through a Cloudflare Quick Tunnel.",
+  "exports": {
+    "./server": "./src/server.ts",
+    "./host": "./src/host.ts"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/build.mjs && node dist/cli.cjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/build.mjs && vitest run",
+    "test:tunnel": "node scripts/build.mjs && vitest run tunnel.e2e"
+  },
+  "dependencies": {
+    "@genesys/shared": "workspace:^",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/ws": "^8.18.2",
+    "esbuild": "^0.28.2",
+    "vitest": "^5.0.5"
+  }
+}

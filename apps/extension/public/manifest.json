@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Genesys Overlay",
+  "version": "0.2.0",
+  "description": "Unofficial, fan-made Genesys RPG dice and character sheets for Alchemy RPG. Not affiliated with Fantasy Flight Games.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3tCRAMcSFeliC4tlZv9ZJ6BgQ8JsGvRvMhqQOL+RQ6MUb3HFHoSUYNYdoCp12lwS4eteOATd75vXMeJPeGvKdry+bh0zBMdV3MiBiyh1nucCgkGZO9ikf73DrEqqLPwBOsGFIU0UPfnHeVsWgd97nUUid/e79u1HGn3H6bopbRVRmRDzT9tVfxx7toxEexblbt7iRl8mgGptiHcfg4iZt91mMaANZ/mAlWsttBaTbdHKFOQRjlETFPmHJV73WgPmJgC81xrHvvlKttUVei3c60TOjZ6mx51XcwjQ+F85OmGtThbVtKkPa+RrJzlBNHOyLVSBhrE4iTqYSP5ExaLz9QIDAQAB",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "storage",
+    "nativeMessaging"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.alchemyrpg.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://*.trycloudflare.com/join*"
+      ],
+      "js": [
+        "invite.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

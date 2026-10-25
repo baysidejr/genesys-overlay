@@ -1,0 +1,1861 @@
+/* Everything here lives inside the overlay's shadow root. */
+
+:host {
+  all: initial;
+  --felt: #25303c;
+  --raised: #303c4a;
+  --raised-hover: #384657;
+  --rim: #435163;
+  --text: #e6ebf0;
+  --muted: #9aa7b5;
+  --orange: #f29a2e;
+  --orange-hover: #ffab45;
+  --orange-ink: #2b1800;
+  --good: #8bdc96;
+  --bad: #ff9097;
+  --focus: #9fd3ff;
+  /* Recessed fields and wells, hairline dividers, light hover. */
+  --well: rgb(10 16 24 / 0.2);
+  --well-deep: rgb(10 16 24 / 0.32);
+  --hairline: rgb(255 255 255 / 0.06);
+  --hover-tint: rgb(255 255 255 / 0.08);
+  --text-font: "Genesys Overlay Text", system-ui, sans-serif;
+  --display-font: "Genesys Overlay Display", "Arial Narrow", sans-serif;
+  --symbol-font: "Genesys Overlay Symbols";
+  /* Felt: very low-contrast noise so the tray reads as cloth, not glass. */
+  --felt-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --shadow: 0 18px 40px -12px rgb(6 10 16 / 0.6), 0 2px 6px rgb(6 10 16 / 0.35);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Dice layer ---------- */
+
+/* Covers the screen but lets every click through to the map. */
+.dice-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+}
+
+.dice-layer canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Tray ---------- */
+
+/* Placed by drag.ts: left/right/top/bottom come from the nearest corner. */
+.tray {
+  position: fixed;
+  z-index: 2147483001;
+  font-family: var(--text-font);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.panel,
+.launcher,
+.result {
+  background: var(--felt-texture), var(--felt);
+  border: 1px solid var(--rim);
+  box-shadow: var(--shadow), inset 0 1px 0 var(--hairline);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: min(352px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  border-radius: 16px;
+  overflow: hidden;
+  transition:
+    transform 160ms ease-out,
+    opacity 160ms ease-out;
+}
+
+/* The panel opens and closes toward the corner the tray is anchored to. */
+.tray[data-h="left"] .panel {
+  left: 0;
+}
+.tray[data-h="right"] .panel {
+  right: 0;
+}
+.tray[data-v="top"] .panel {
+  top: 0;
+}
+.tray[data-v="bottom"] .panel {
+  bottom: 0;
+}
+.tray[data-h="left"][data-v="top"] .panel {
+  transform-origin: top left;
+}
+.tray[data-h="right"][data-v="top"] .panel {
+  transform-origin: top right;
+}
+.tray[data-h="left"][data-v="bottom"] .panel {
+  transform-origin: bottom left;
+}
+.tray[data-h="right"][data-v="bottom"] .panel {
+  transform-origin: bottom right;
+}
+
+/* Collapsed, the launcher sets the tray's size and the panel floats over it. */
+.tray[data-open="false"] .panel {
+  position: absolute;
+  transform: scale(0.94);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 140ms ease-in,
+    opacity 140ms ease-in,
+    visibility 0s 140ms;
+}
+
+.launcher {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 14px;
+  cursor: grab;
+}
+
+.tray[data-open="true"] .launcher {
+  display: none;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px 10px 6px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.launcher {
+  touch-action: none;
+}
+
+.grip {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--rim);
+  cursor: grab;
+}
+
+.grip:hover,
+.grip:focus-visible {
+  color: var(--muted);
+}
+
+.tray[data-dragging],
+.tray[data-dragging] * {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+.tray[data-dragging] .panel {
+  box-shadow:
+    0 28px 60px -14px rgb(6 10 16 / 0.7),
+    0 2px 6px rgb(6 10 16 / 0.35),
+    inset 0 1px 0 var(--hairline);
+}
+
+.title {
+  margin: 0 auto 0 0;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.room-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--rim);
+  border-radius: 999px;
+  background: var(--raised);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.room-chip:hover,
+.room-chip[aria-expanded="true"] {
+  background: var(--raised-hover);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.dot[data-state="open"] {
+  background: var(--good);
+}
+
+.dot[data-state="connecting"] {
+  background: var(--orange);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.dot[data-state="closed"] {
+  background: var(--bad);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.icon-button:hover {
+  background: var(--raised);
+  color: var(--text);
+}
+
+/* ---------- Game sheet ---------- */
+
+.room-sheet {
+  display: grid;
+  gap: 10px;
+  max-height: min(60vh, 520px);
+  margin: 0 12px 4px;
+  padding: 14px;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: var(--well-deep);
+  scrollbar-width: thin;
+  scrollbar-color: var(--rim) transparent;
+}
+
+.sheet-body {
+  display: grid;
+  gap: 10px;
+}
+
+.sheet-heading {
+  margin: 6px 0 -2px;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* Player name spans the row; character and class share the next one. */
+.field-grid > .field-label:first-child {
+  grid-column: 1 / -1;
+}
+
+.field-label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.field-label .muted {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sheet-row.end {
+  justify-content: flex-end;
+}
+
+.invite-field {
+  font-size: 12.5px;
+  color: var(--text);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 14px;
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.players {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 30px;
+}
+
+.player-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player[data-online="false"] .player-name {
+  color: var(--muted);
+}
+
+.requests {
+  display: grid;
+  gap: 6px;
+}
+
+/* A join request is the one thing waiting on the GM, so it gets the accent. */
+.request {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--orange) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--orange) 9%, transparent);
+}
+
+.request-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.secondary.small {
+  height: 30px;
+  padding: 0 12px;
+}
+
+.secondary.danger:hover:not(:disabled) {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.fine {
+  margin: 0;
+  font-size: 12px;
+}
+
+.room-status .dot {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: 1px;
+}
+
+.sheet-lead,
+.room-status {
+  margin: 0;
+  color: var(--text);
+}
+
+.sheet-row,
+.room-code-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-code {
+  margin-right: auto;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.field {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--rim);
+  border-radius: 8px;
+  background: var(--well-deep);
+}
+
+.field::placeholder {
+  color: var(--muted);
+}
+
+.field:focus-visible {
+  outline-offset: 0;
+  border-color: var(--focus);
+}
+
+.code-field {
+  flex: 1;
+  font-family: var(--display-font);
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.12em;
+}
+
+.secondary {
+  flex: none;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--rim);
+  border-radius: 8px;
+  background: var(--raised);
+  font-weight: 600;
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--raised-hover);
+}
+
+.secondary:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.text-button {
+  flex: none;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.text-button:hover {
+  color: var(--text);
+}
+
+.notice {
+  margin: 0;
+  color: var(--bad);
+  font-size: 13px;
+}
+
+/* ---------- Pool builder ---------- */
+
+.builder {
+  display: grid;
+  gap: 8px;
+  padding: 4px 12px 12px;
+}
+
+.hand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 8px 8px 10px;
+  border-radius: 12px;
+  background: var(--well-deep);
+  box-shadow: inset 0 2px 6px rgb(0 0 0 / 0.25);
+}
+
+.hand-dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-right: auto;
+}
+
+.hand-die {
+  display: grid;
+  place-items: center;
+  padding: 3px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  animation: drop-in 140ms ease-out;
+}
+
+.hand-die:hover {
+  background: var(--hover-tint);
+}
+
+@keyframes drop-in {
+  from {
+    transform: translateY(-6px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.hand-empty {
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.chip-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.chip {
+  position: relative;
+}
+
+.chip-add {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--raised);
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: background 100ms;
+}
+
+.chip-add:hover {
+  background: var(--raised-hover);
+}
+
+.chip-add:active .gem {
+  transform: scale(0.9);
+}
+
+.gem {
+  display: block;
+  transition: transform 80ms;
+}
+
+.chip[data-active="true"] .chip-add {
+  border-color: var(--rim);
+  background: var(--raised-hover);
+}
+
+.chip-count {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.chip-remove {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0 0 2px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.chip-remove:hover {
+  background: var(--well-deep);
+  color: var(--text);
+}
+
+.roll-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.label-field {
+  flex: 1;
+}
+
+/* The GM's hidden switch needs room, so the label gets its own line. */
+.roll-bar:has(.switch:not([hidden])) {
+  flex-wrap: wrap;
+}
+
+.roll-bar:has(.switch:not([hidden])) .label-field {
+  flex-basis: 100%;
+}
+
+.roll-bar:has(.switch:not([hidden])) .switch {
+  margin-left: auto;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.switch-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.switch-track {
+  position: relative;
+  width: 28px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--rim);
+  transition: background 120ms;
+}
+
+.switch-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text);
+  transition: transform 120ms;
+}
+
+.switch-input:checked + .switch-track {
+  background: var(--orange);
+}
+
+.switch-input:checked + .switch-track::after {
+  transform: translateX(12px);
+}
+
+.switch-input:focus-visible + .switch-track {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.roll {
+  flex: none;
+  min-width: 108px;
+  height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--orange);
+  color: var(--orange-ink);
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 -2px 0 rgb(0 0 0 / 0.18);
+}
+
+.roll:hover:not(:disabled) {
+  background: var(--orange-hover);
+}
+
+.roll:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.roll:disabled {
+  background: var(--raised);
+  color: var(--muted);
+  box-shadow: none;
+  cursor: default;
+}
+
+/* ---------- Symbols ---------- */
+
+.glyphs {
+  font-family: var(--symbol-font);
+  font-size: 1.15em;
+  line-height: 1;
+  letter-spacing: 0.06em;
+}
+
+.glyphs.good {
+  color: var(--good);
+}
+
+.glyphs.bad {
+  color: var(--bad);
+}
+
+.tag {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--orange) 18%, transparent);
+  color: var(--orange);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* ---------- Log ---------- */
+
+.log {
+  flex: 1;
+  min-height: 0;
+  max-height: 210px;
+  margin: 0;
+  padding: 4px 12px 12px;
+  overflow-y: auto;
+  list-style: none;
+  border-top: 1px solid var(--hairline);
+  scrollbar-width: thin;
+  scrollbar-color: var(--rim) transparent;
+}
+
+.log-empty {
+  padding: 12px 4px 2px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.log-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.log-item:last-child {
+  border-bottom: 0;
+}
+
+.log-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.log-item {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+}
+
+.log-who {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.log-player {
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.log-time {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.log-line .log-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.result-by {
+  margin-left: 8px;
+  color: var(--muted);
+}
+
+.log-label {
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.log-verdict {
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.log-item[data-passed="false"] .log-verdict {
+  color: var(--muted);
+}
+
+/* ---------- Result card ---------- */
+
+.results {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 2147483002;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  font-family: var(--text-font);
+  color: var(--text);
+}
+
+.result {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  min-width: 260px;
+  padding: 14px 22px 14px 28px;
+  border-radius: 14px;
+  text-align: left;
+  animation: land 260ms cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+
+/* The seal on the left edge carries the verdict's color. */
+.result::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 12px;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--bad);
+}
+
+.result[data-passed="true"]::before {
+  background: var(--good);
+}
+
+.result[data-leaving] {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition:
+    opacity 180ms ease-in,
+    transform 180ms ease-in;
+}
+
+@keyframes land {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.96);
+  }
+}
+
+.result-meta {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.result-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.result-word {
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1;
+  letter-spacing: -0.005em;
+}
+
+.result .glyphs {
+  font-size: 30px;
+}
+
+.result-detail {
+  font-size: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- Character sheet ---------- */
+
+/* Full page over the tabletop. It sits under the dice layer, so a roll
+   made from the sheet tumbles across it; the tray stays on top. */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482990;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(6 10 16 / 0.55);
+  font-family: var(--text-font);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.sheet-panel {
+  width: min(1180px, 100%);
+  height: 100%;
+  max-height: none;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 16px 12px 24px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sheet-head .title {
+  margin: 0;
+  font-size: 24px;
+}
+
+.sheet-close {
+  margin-left: auto;
+}
+
+.sheet-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 28px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rim) transparent;
+}
+
+.sheet-section {
+  display: grid;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sheet-section:last-child {
+  border-bottom: 0;
+}
+
+/* Fields read as text until you point at them. */
+.sheet-field,
+.number-field,
+select.field {
+  height: 32px;
+  border-color: transparent;
+  background: var(--well);
+}
+
+.sheet-field:hover,
+.number-field:hover,
+select.field:hover {
+  border-color: var(--rim);
+}
+
+select.field {
+  padding: 0 6px;
+  cursor: pointer;
+}
+
+select.field option,
+select.field optgroup {
+  background: var(--felt);
+  color: var(--text);
+}
+
+.sheet-name {
+  height: 42px;
+  padding: 0 8px;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 26px;
+  background: transparent;
+}
+
+.sheet-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.number-field {
+  width: 100%;
+  padding: 0 4px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.number-field::-webkit-inner-spin-button,
+.number-field::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+/* The six characteristic circles, as on the printed sheet. */
+.characteristics {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.characteristic {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.characteristic .number-field {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--rim);
+  border-radius: 50%;
+  background: var(--well-deep);
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.characteristic .number-field:focus-visible {
+  border-color: var(--focus);
+}
+
+.characteristic-name {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.badge {
+  display: grid;
+  gap: 4px;
+  padding: 7px 6px 6px;
+  border: 1px solid var(--rim);
+  border-radius: 10px;
+  background: var(--raised);
+}
+
+.badge-title {
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+}
+
+.badge-cells {
+  display: flex;
+  gap: 4px;
+}
+
+.badge-cell {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+.badge-cell .number-field {
+  min-width: 34px;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+}
+
+.stepper .number-field {
+  min-width: 30px;
+  border-radius: 0;
+}
+
+.step {
+  width: 18px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: var(--well-deep);
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.step:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.step:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.step:hover {
+  color: var(--text);
+}
+
+.xp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.skill-group {
+  display: grid;
+}
+
+.skill-group-head,
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr 44px 86px 78px;
+  align-items: center;
+  gap: 6px;
+}
+
+.skill-group-head {
+  padding: 6px 0 4px;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.skill-group-head .muted {
+  font-family: var(--text-font);
+  font-weight: 500;
+  font-size: 11.5px;
+  text-align: center;
+}
+
+.skill-row {
+  min-height: 32px;
+  border-top: 1px solid var(--hairline);
+}
+
+.skill-name {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skill-name .muted {
+  font-size: 12px;
+}
+
+.career-box {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 1.5px solid var(--rim);
+  border-radius: 4px;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+}
+
+.career-box:hover {
+  border-color: var(--muted);
+}
+
+.career-box:checked {
+  border-color: var(--orange);
+  background: var(--orange);
+}
+
+.career-box:checked::after {
+  content: "";
+  width: 4px;
+  height: 8px;
+  margin-top: -2px;
+  border: solid var(--orange-ink);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.pips {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+}
+
+.pip {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 1.5px solid var(--rim);
+  border-radius: 3px;
+  background: transparent;
+  transform: rotate(45deg) scale(0.82);
+}
+
+.pip[data-on="true"] {
+  border-color: var(--good);
+  background: var(--good);
+}
+
+.pip:hover {
+  border-color: var(--text);
+}
+
+/* Clicking a pool puts those dice in the tray. */
+.pool-button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1px;
+  min-height: 28px;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+}
+
+.pool-button:hover:not(:disabled) {
+  border-color: var(--rim);
+  background: var(--raised);
+}
+
+.pool-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pool-button .gem {
+  flex: none;
+}
+
+.weapons {
+  display: grid;
+  gap: 8px;
+}
+
+.weapon {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--rim);
+  border-radius: 10px;
+  background: var(--well);
+}
+
+.weapon-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.weapon-top .sheet-field {
+  flex: 1;
+  font-weight: 600;
+}
+
+.weapon-stats {
+  display: grid;
+  grid-template-columns: 1.6fr 0.8fr 0.7fr 1.2fr;
+  gap: 6px;
+}
+
+.sheet-manage {
+  gap: 8px;
+}
+
+.manage-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+}
+
+.danger-text:hover {
+  color: var(--bad);
+}
+
+.confirm {
+  flex-wrap: wrap;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--bad) 40%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bad) 7%, transparent);
+}
+
+.confirm span {
+  flex-basis: 100%;
+}
+
+.import-area {
+  display: grid;
+  gap: 6px;
+}
+
+.import-box {
+  height: auto;
+  padding: 8px 10px;
+  resize: vertical;
+  font-size: 12.5px;
+  font-family: var(--text-font);
+}
+
+.sheet-empty {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 16px 0 6px;
+  color: var(--muted);
+}
+
+.sheet-empty p {
+  margin: 0;
+}
+
+/* A brief glow when the sheet drops a pool into the tray. */
+.hand[data-flash] {
+  box-shadow: inset 0 2px 6px rgb(0 0 0 / 0.25), 0 0 0 2px var(--orange);
+  transition: box-shadow 400ms ease-out;
+}
+
+/* ---------- Sheet pages ---------- */
+
+.sheet-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.sheet-tab {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.sheet-tab:hover {
+  color: var(--text);
+}
+
+.sheet-tab[aria-selected="true"] {
+  border-color: var(--rim);
+  background: var(--raised);
+  color: var(--text);
+}
+
+.sheet-area {
+  height: auto;
+  min-height: 32px;
+  padding: 6px 10px;
+  overflow: hidden;
+  resize: none;
+  line-height: 1.4;
+  font-size: 13.5px;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.span-all {
+  grid-column: 1 / -1;
+}
+
+.money-row {
+  display: grid;
+  grid-template-columns: 140px;
+}
+
+.injury {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 6px;
+}
+
+.injury-severity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.injury-dice {
+  display: flex;
+  gap: 1px;
+  min-width: 58px;
+}
+
+.talent-card {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--rim);
+  border-radius: 10px;
+  background: var(--well);
+}
+
+.talent-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.talent-top .sheet-field {
+  flex: 1;
+  font-weight: 600;
+}
+
+.tier-tag {
+  flex: none;
+  margin: 0;
+  background: color-mix(in srgb, var(--good) 15%, transparent);
+  color: var(--good);
+}
+
+.talent-meta {
+  display: grid;
+  grid-template-columns: 120px;
+}
+
+/* Talent pyramid */
+
+.pyramid-lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.pyramid-totals {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.pyramid-status {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bad) 9%, transparent);
+  color: var(--bad);
+  font-size: 13px;
+}
+
+.pyramid-status[data-ok="true"] {
+  background: color-mix(in srgb, var(--good) 9%, transparent);
+  color: var(--good);
+}
+
+.pyramid {
+  gap: 12px;
+}
+
+.tier {
+  display: grid;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 3px solid color-mix(in srgb, var(--orange) calc(var(--tier-strength, 0.2) * 100%), transparent);
+}
+
+.tier[aria-label^="Tier 5"] { --tier-strength: 1; }
+.tier[aria-label^="Tier 4"] { --tier-strength: 0.8; }
+.tier[aria-label^="Tier 3"] { --tier-strength: 0.6; }
+.tier[aria-label^="Tier 2"] { --tier-strength: 0.4; }
+
+.tier-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.tier-name {
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.tier-slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.talent-slot {
+  display: grid;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--rim);
+  border-radius: 8px;
+  background: var(--well);
+}
+
+.talent-slot .sheet-field {
+  height: 30px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.slot-meta {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 4px;
+}
+
+.slot-meta .sheet-field {
+  height: 26px;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.slot-meta .icon-button {
+  width: 26px;
+  height: 26px;
+}
+
+.slot-active {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.talent-add {
+  min-height: 70px;
+  border: 1px dashed var(--rim);
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.talent-add:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+/* ---------- Full-page sheet layouts ---------- */
+
+/* Play: like the printed page 1. Name across the top, characteristics and
+   stats side by side, skills in two columns, weapons below. */
+.page-play {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 32px;
+}
+
+.page-play > .sheet-section {
+  grid-column: 1 / -1;
+}
+
+.page-play > .sec-characteristics {
+  grid-column: 1 / 7;
+  grid-row: span 2;
+  align-content: center;
+}
+
+.page-play > .sec-derived,
+.page-play > .sec-xp {
+  grid-column: 7 / -1;
+}
+
+/* Banners and the name label are for the Genesys theme. */
+.sheet-kicker,
+.name-label,
+.sheet-banner:not(.sheet-heading),
+.weapons-head {
+  display: none;
+}
+
+.page-play .sheet-header {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  align-items: end;
+}
+
+.page-play .sheet-name {
+  height: 52px;
+  font-size: 34px;
+}
+
+.page-play .characteristic .number-field {
+  width: 68px;
+  height: 68px;
+  font-size: 34px;
+}
+
+.page-play .characteristic-name {
+  font-size: 13px;
+}
+
+.skill-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+}
+
+.skill-column {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.page-play .weapons {
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+}
+
+/* Story: two columns, talents and notes across the bottom. */
+.page-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 32px;
+}
+
+.page-story > .sec-talents,
+.page-story > .sec-notes {
+  grid-column: 1 / -1;
+}
+
+.page-story .talent-card {
+  align-content: start;
+}
+
+.page-story > .sec-talents {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.page-story > .sec-talents > .sheet-heading,
+.page-story > .sec-talents > p,
+.page-story > .sec-talents > .sheet-row {
+  grid-column: 1 / -1;
+}
+
+/* Talents: a real pyramid, narrow at the top. */
+.page-talents .pyramid {
+  justify-items: stretch;
+}
+
+.page-talents .tier-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.page-talents .talent-slot,
+.page-talents .talent-add {
+  width: 200px;
+}
+
+/* Character tools sit in a single row under the page. */
+.sheet-manage {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.sheet-manage > select {
+  width: 220px;
+}
+
+.sheet-manage > .confirm,
+.sheet-manage > .import-area,
+.sheet-manage > [role="status"] {
+  grid-column: 1 / -1;
+}
+
+/* Narrow windows: one column, like the old panel. */
+@media (max-width: 900px) {
+  .sheet {
+    padding: 8px;
+  }
+
+  .sheet-head {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 10px 8px 16px;
+  }
+
+  .sheet-scroll {
+    padding: 4px 14px 14px;
+  }
+
+  .page-play > .sheet-section,
+  .page-story > .sheet-section {
+    grid-column: 1 / -1;
+  }
+
+  .page-play .sheet-header,
+  .skill-columns,
+  .page-story {
+    grid-template-columns: 1fr;
+  }
+
+  .page-play .characteristic .number-field {
+    width: 50px;
+    height: 50px;
+    font-size: 26px;
+  }
+}
+
+/* Side-by-side sections share a row height; keep each one's contents at its top. */
+.sheet-page > .sheet-section {
+  align-content: start;
+}
+
+/* ---------- Light page ---------- */
+
+/* The character sheet can be a light page, like the printed sheet. Cool
+   paper, not cream; the die colors stay the same in both. */
+/* The dice tray and roll results wear the sheet's theme too. */
+.sheet[data-theme="light"],
+.tray[data-theme="light"],
+.results[data-theme="light"] {
+  --felt: #eef2f6;
+  --raised: #ffffff;
+  --raised-hover: #f5f8fb;
+  --rim: #c3ccd6;
+  --text: #18212b;
+  --muted: #5a6876;
+  --orange: #d97b0d;
+  --orange-hover: #e98a1c;
+  --orange-ink: #ffffff;
+  --good: #23803c;
+  --bad: #c0303b;
+  --focus: #1f6fd1;
+  --well: rgb(24 40 60 / 0.05);
+  --well-deep: rgb(24 40 60 / 0.08);
+  --hairline: rgb(24 40 60 / 0.1);
+  --hover-tint: rgb(24 40 60 / 0.06);
+  --felt-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --shadow: 0 24px 60px -16px rgb(6 10 16 / 0.45), 0 2px 8px rgb(6 10 16 / 0.2);
+}
+
+.sheet[data-theme="light"] .sheet-panel {
+  box-shadow: var(--shadow), inset 0 1px 0 rgb(255 255 255 / 0.8);
+}
+
+/* White fields on paper read better than tinted wells. */
+.sheet[data-theme="light"] .sheet-field,
+.sheet[data-theme="light"] .number-field,
+.sheet[data-theme="light"] select.field,
+.sheet[data-theme="light"] .import-box {
+  border-color: rgb(24 40 60 / 0.12);
+  background: #ffffff;
+}
+
+.sheet[data-theme="light"] .sheet-name {
+  border-color: transparent;
+  background: transparent;
+}
+
+.sheet[data-theme="light"] .characteristic .number-field {
+  border-color: var(--text);
+  background: #ffffff;
+}
+
+.sheet[data-theme="light"] .career-box:checked::after {
+  border-color: #ffffff;
+}

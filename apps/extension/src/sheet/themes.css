@@ -1,0 +1,940 @@
+/* Character sheet themes beyond dark and light, plus the theme menu.
+   Loaded after overlay.css inside the overlay's shadow root. */
+
+.name-row {
+  display: grid;
+}
+
+/* ---------- Theme menu ---------- */
+
+.theme-picker {
+  position: relative;
+  margin-left: auto;
+}
+
+.theme-picker + .sheet-close {
+  margin-left: 0;
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 2;
+  display: grid;
+  gap: 2px;
+  width: 270px;
+  padding: 6px;
+  border: 1px solid var(--rim);
+  border-radius: 12px;
+  background: var(--raised);
+  box-shadow: var(--shadow);
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  text-align: left;
+}
+
+.theme-option:hover,
+.theme-option:focus-visible {
+  background: var(--hover-tint);
+}
+
+.theme-option[aria-checked="true"] {
+  background: var(--well-deep);
+}
+
+.theme-text {
+  display: grid;
+  font-weight: 600;
+  font-size: 13.5px;
+}
+
+.theme-text .muted {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.theme-swatch {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--rim);
+  border-radius: 50%;
+}
+
+.theme-swatch[data-theme="system"] {
+  background: linear-gradient(135deg, #eef2f6 50%, #25303c 50%);
+}
+
+.theme-swatch[data-theme="dark"] {
+  background: #25303c;
+}
+
+.theme-swatch[data-theme="light"] {
+  background: #eef2f6;
+}
+
+.theme-swatch[data-theme="genesys"] {
+  background: conic-gradient(#9b2d24 0 33%, #1f4f7f 0 66%, #f0a238 0);
+}
+
+/* =========================================================================
+   Genesys theme: recreates the look of the printed generic character sheet
+   (paper and triangle grid, blue-grey panels, red and blue stat badges,
+   blue characteristic shields on an orange band, banner headings, ruled
+   skill tables, chevron rank pills, staircase talent pyramid). Built from
+   CSS only; no artwork or logo from the printed sheet is used.
+   ========================================================================= */
+
+/* The dice tray and roll results wear the sheet's theme too. */
+.sheet[data-theme="genesys"],
+.tray[data-theme="genesys"],
+.results[data-theme="genesys"] {
+  --g-paper: #f4f2ed;
+  --g-panel: #dde7ec;
+  --g-line: #6d7b88;
+  --g-ink: #1e2a36;
+  --g-label: #4c5763;
+  --g-red: #9b2d24;
+  --g-red-dark: #741d17;
+  --g-blue: #1f4f7f;
+  --g-blue-dark: #153a5f;
+  --g-orange: #f0a238;
+  --g-slate: #34465a;
+
+  --felt: var(--g-paper);
+  --raised: #ffffff;
+  --raised-hover: #f6f8fa;
+  --rim: #9fb0bf;
+  --text: var(--g-ink);
+  --muted: var(--g-label);
+  --orange: var(--g-orange);
+  --orange-hover: #f6b04e;
+  --orange-ink: var(--g-ink);
+  --good: var(--g-blue);
+  --bad: var(--g-red);
+  --focus: #1f6fd1;
+  --well: #ffffff;
+  --well-deep: #e9eef1;
+  --hairline: rgb(30 42 54 / 0.14);
+  --hover-tint: rgb(30 42 54 / 0.06);
+  --shadow: 0 24px 60px -16px rgb(6 10 16 / 0.45), 0 2px 8px rgb(6 10 16 / 0.2);
+  /* Faint triangle grid, like the printed paper. */
+  --felt-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='69.28'%3E%3Cpath d='M0 0L40 69.28M40 0L0 69.28M0 34.64H40M0 0H40' stroke='%23b4c2cd' stroke-width='.7' opacity='.55' fill='none'/%3E%3C/svg%3E");
+}
+
+.sheet[data-theme="genesys"] .sheet-head {
+  background: #e9eef1;
+}
+
+.sheet[data-theme="genesys"] .sheet-scroll {
+  padding: 18px 28px 24px;
+}
+
+/* Printed-sheet type: condensed capitals for every label. */
+.sheet[data-theme="genesys"] :is(.field-label > span, .sheet-heading, .skill-group-head, .badge-title, .badge-cell > .cell-label, .characteristic-name, .skill-name, .tier-head, .weapons-head, .sheet-kicker, .name-label) {
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.sheet[data-theme="genesys"] .sheet-section {
+  border-bottom: 0;
+}
+
+.sheet[data-theme="genesys"] :is(.sheet-field, .number-field, select.field) {
+  border-color: transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--g-ink);
+}
+
+.sheet[data-theme="genesys"] :is(.sheet-field, .number-field, select.field):hover {
+  border-color: var(--rim);
+}
+
+/* Section titles sit small and right-aligned, like "MOTIVATIONS". */
+.sheet[data-theme="genesys"] .sheet-heading:not(.sheet-banner) {
+  justify-self: end;
+  color: var(--g-label);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Dark slate banners with angled ends: CHARACTERISTICS, SKILLS, WEAPONS. */
+.sheet[data-theme="genesys"] .sheet-banner {
+  display: block;
+  justify-self: center;
+  width: 230px;
+  margin: 0 auto;
+  padding: 3px 0 2px;
+  background: var(--g-slate);
+  clip-path: polygon(7% 0, 93% 0, 100% 50%, 93% 100%, 7% 100%, 0 50%);
+  color: #ffffff;
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ---------- Page 1 ---------- */
+
+.sheet[data-theme="genesys"] .page-play {
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 24px;
+}
+
+.sheet[data-theme="genesys"] .page-play > .sec-header { grid-column: 1 / 9; grid-row: 1; }
+.sheet[data-theme="genesys"] .page-play > .sec-xp { grid-column: 9 / -1; grid-row: 1; align-content: center; }
+.sheet[data-theme="genesys"] .page-play > .sec-derived { grid-column: 1 / -1; grid-row: 2; }
+.sheet[data-theme="genesys"] .page-play > .sec-characteristics { grid-column: 1 / -1; grid-row: 3; }
+.sheet[data-theme="genesys"] .page-play > .sec-skills { grid-column: 1 / -1; grid-row: 4; }
+.sheet[data-theme="genesys"] .page-play > .sec-weapons { grid-column: 1 / -1; grid-row: 5; }
+
+/* Header box: ruled lines, label on the left. */
+.sheet[data-theme="genesys"] .sec-header {
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 10px 16px 12px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--g-panel) 85%, transparent);
+}
+
+.sheet[data-theme="genesys"] .sheet-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--g-label);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.sheet[data-theme="genesys"] .name-label {
+  display: block;
+}
+
+.sheet[data-theme="genesys"] .sheet-meta {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.sheet[data-theme="genesys"] :is(.name-row, .sec-header .field-label) {
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: 8px;
+  border-bottom: 1px solid var(--g-line);
+}
+
+.sheet[data-theme="genesys"] :is(.name-label, .sec-header .field-label > span) {
+  padding-bottom: 6px;
+  color: var(--g-ink);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.sheet[data-theme="genesys"] :is(.name-label, .sec-header .field-label > span)::after {
+  content: ":";
+}
+
+.sheet[data-theme="genesys"] .sheet-name {
+  height: 34px;
+  padding: 0 4px;
+  font-family: var(--text-font);
+  font-weight: 600;
+  font-size: 17px;
+}
+
+/* XP sits where the printed sheet has its logo. */
+.sheet[data-theme="genesys"] .xp-row {
+  padding: 12px;
+  border: 2px solid var(--g-orange);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .sec-xp .number-field {
+  height: 40px;
+  border-bottom: 1px solid var(--g-line);
+  font-family: var(--display-font);
+  font-weight: 700;
+  font-size: 24px;
+}
+
+/* Soak / Wounds / Strain / Defense: red banner, white boxes, red and blue labels. */
+.sheet[data-theme="genesys"] .badges {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.sheet[data-theme="genesys"] .badge {
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 3px solid var(--g-red);
+  border-right-color: var(--g-blue);
+  border-bottom-color: var(--g-blue);
+  border-radius: 6px 6px 30px 30px;
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .badge:first-child {
+  border-color: var(--g-red);
+}
+
+.sheet[data-theme="genesys"] .badge-title {
+  padding: 6px 4px 5px;
+  background: var(--g-red);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 88% 100%, 12% 100%, 0 70%);
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.sheet[data-theme="genesys"] .badge-cells {
+  gap: 0;
+}
+
+.sheet[data-theme="genesys"] .badge-cell {
+  justify-items: stretch;
+  gap: 0;
+  color: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .badge-cell .stepper {
+  justify-content: center;
+}
+
+.sheet[data-theme="genesys"] .badge-cell + .badge-cell {
+  border-left: 2px solid var(--g-red);
+}
+
+.sheet[data-theme="genesys"] .badge-cell .number-field {
+  height: 54px;
+  font-size: 30px;
+}
+
+.sheet[data-theme="genesys"] .badge-cell > .cell-label {
+  align-self: stretch;
+  padding: 2px 0 3px;
+  background: var(--g-red);
+  font-size: 13px;
+  text-align: center;
+}
+
+.sheet[data-theme="genesys"] .badge-cell:last-child:not(:only-child) > .cell-label {
+  background: var(--g-blue);
+}
+
+.sheet[data-theme="genesys"] .badge-cell:only-child > .cell-label {
+  color: transparent;
+}
+
+/* Defense reads Ranged then Melee on the printed sheet. */
+.sheet[data-theme="genesys"] .badge:nth-child(4) .badge-cell:first-child {
+  order: 2;
+  border-left: 2px solid var(--g-red);
+}
+
+.sheet[data-theme="genesys"] .badge:nth-child(4) .badge-cell:first-child > .cell-label {
+  background: var(--g-blue);
+}
+
+.sheet[data-theme="genesys"] .badge:nth-child(4) .badge-cell:last-child {
+  border-left: 0;
+}
+
+.sheet[data-theme="genesys"] .badge:nth-child(4) .badge-cell:last-child > .cell-label {
+  background: var(--g-red);
+}
+
+.sheet[data-theme="genesys"] .stepper .number-field {
+  min-width: 34px;
+}
+
+.sheet[data-theme="genesys"] .step {
+  height: 54px;
+  background: transparent;
+  color: var(--g-label);
+}
+
+/* Characteristics: blue shields with white rings on an orange band. */
+.sheet[data-theme="genesys"] .sec-characteristics {
+  gap: 0;
+}
+
+.sheet[data-theme="genesys"] .characteristics {
+  gap: 18px;
+  padding: 44px 0 6px;
+  background: linear-gradient(transparent 0 58%, var(--g-orange) 58% 82%, transparent 82%);
+}
+
+.sheet[data-theme="genesys"] .characteristic {
+  gap: 8px;
+  padding: 0 6px 12px;
+  border: 2px solid var(--g-blue-dark);
+  border-radius: 10px 10px 4px 4px;
+  background: linear-gradient(var(--g-blue), var(--g-blue-dark));
+  box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.18);
+}
+
+.sheet[data-theme="genesys"] .characteristic .number-field {
+  width: 84px;
+  height: 84px;
+  margin-top: -40px;
+  border: 5px solid var(--g-blue);
+  border-radius: 50%;
+  outline: 2px solid #ffffff;
+  outline-offset: -9px;
+  background: #ffffff;
+  color: var(--g-ink);
+  font-family: var(--display-font);
+  font-size: 40px;
+}
+
+.sheet[data-theme="genesys"] .characteristic-name {
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 500;
+}
+
+/* Skills: blue-grey panels around ruled white tables. */
+.sheet[data-theme="genesys"] .sec-skills {
+  gap: 14px;
+}
+
+.sheet[data-theme="genesys"] .skill-columns {
+  gap: 0 28px;
+}
+
+.sheet[data-theme="genesys"] .skill-column {
+  gap: 18px;
+}
+
+.sheet[data-theme="genesys"] .skill-group {
+  padding: 4px 8px 8px;
+  border-radius: 4px;
+  background: var(--g-panel);
+}
+
+.sheet[data-theme="genesys"] :is(.skill-group-head, .skill-row) {
+  grid-template-columns: 1fr 50px 136px 70px;
+}
+
+.sheet[data-theme="genesys"] .skill-group-head {
+  padding: 4px 6px 3px;
+  color: var(--g-label);
+  font-weight: 500;
+  font-size: 12.5px;
+}
+
+.sheet[data-theme="genesys"] .skill-group-head > span:first-child::after {
+  content: " skills";
+}
+
+.sheet[data-theme="genesys"] .skill-group-head .muted {
+  color: var(--g-label);
+  font-family: var(--display-font);
+  font-size: 12.5px;
+}
+
+.sheet[data-theme="genesys"] .skill-row {
+  min-height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--g-line);
+  border-top: 1px dashed rgb(109 123 136 / 0.5);
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .skill-group-head + .skill-row {
+  border-top: 1px solid var(--g-line);
+}
+
+.sheet[data-theme="genesys"] .skill-name {
+  color: var(--g-ink);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.sheet[data-theme="genesys"] .skill-name .muted {
+  color: var(--g-ink);
+  font-size: 15px;
+}
+
+.sheet[data-theme="genesys"] .career-box {
+  border: 1px dashed var(--g-line);
+  border-radius: 1px;
+}
+
+.sheet[data-theme="genesys"] .career-box:checked {
+  border-style: solid;
+  border-color: var(--g-blue);
+  background: var(--g-blue);
+}
+
+.sheet[data-theme="genesys"] .career-box:checked::after {
+  border-color: #ffffff;
+}
+
+/* Rank: a pill of five chevrons. */
+.sheet[data-theme="genesys"] .pips {
+  gap: 0;
+  height: 18px;
+  padding: 0 8px;
+  border: 1.5px solid var(--g-ink);
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .pip {
+  width: 22px;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: #d6dee4;
+  clip-path: polygon(0 0, 62% 0, 100% 50%, 62% 100%, 0 100%, 38% 50%);
+  transform: none;
+}
+
+.sheet[data-theme="genesys"] .pip[data-on="true"] {
+  background: var(--g-blue);
+}
+
+.sheet[data-theme="genesys"] .pip:hover {
+  background: #9fb0bf;
+}
+
+/* Weapons: a ruled table. */
+.sheet[data-theme="genesys"] .weapons {
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--g-line);
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .weapons-head,
+.sheet[data-theme="genesys"] .weapon {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 0.7fr 0.6fr 1.1fr 2.4fr 80px 32px;
+  align-items: center;
+  gap: 6px;
+}
+
+.sheet[data-theme="genesys"] .weapons-head {
+  padding: 0 8px 3px;
+  color: var(--g-label);
+  font-weight: 500;
+  font-size: 12.5px;
+}
+
+.sheet[data-theme="genesys"] .weapons-head > span:last-child {
+  grid-column: span 2;
+}
+
+.sheet[data-theme="genesys"] .weapon {
+  padding: 2px 8px;
+  border: 0;
+  border-bottom: 1px dashed rgb(109 123 136 / 0.5);
+  border-radius: 0;
+  background: transparent;
+}
+
+.sheet[data-theme="genesys"] :is(.weapon-top, .weapon-stats) {
+  display: contents;
+}
+
+.sheet[data-theme="genesys"] .weapon .field-label > span {
+  display: none;
+}
+
+.sheet[data-theme="genesys"] .weapon-top .sheet-field { order: 1; }
+.sheet[data-theme="genesys"] .weapon-stats > :nth-child(1) { order: 2; }
+.sheet[data-theme="genesys"] .weapon-stats > :nth-child(2) { order: 3; }
+.sheet[data-theme="genesys"] .weapon-stats > :nth-child(3) { order: 4; }
+.sheet[data-theme="genesys"] .weapon-stats > :nth-child(4) { order: 5; }
+.sheet[data-theme="genesys"] .weapon > .field-label { order: 6; }
+.sheet[data-theme="genesys"] .weapon-top .pool-button { order: 7; }
+.sheet[data-theme="genesys"] .weapon-top .icon-button { order: 8; }
+
+/* ---------- Page 2 ---------- */
+
+.sheet[data-theme="genesys"] .page-story {
+  grid-template-columns: 1.45fr 1fr;
+  grid-template-areas:
+    "motivations description"
+    "equipment description"
+    "notes injuries"
+    "talents talents";
+  gap: 18px 22px;
+}
+
+.sheet[data-theme="genesys"] .page-story > .sec-motivations { grid-area: motivations; }
+.sheet[data-theme="genesys"] .page-story > .sec-description { grid-area: description; }
+.sheet[data-theme="genesys"] .page-story > .sec-equipment { grid-area: equipment; }
+.sheet[data-theme="genesys"] .page-story > .sec-notes { grid-area: notes; }
+.sheet[data-theme="genesys"] .page-story > .sec-injuries { grid-area: injuries; }
+.sheet[data-theme="genesys"] .page-story > .sec-talents { grid-area: talents; }
+
+/* Every story section is a blue-grey panel holding white boxes. */
+.sheet[data-theme="genesys"] .page-story > .sheet-section {
+  padding: 6px 10px 12px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--g-panel) 85%, transparent);
+}
+
+.sheet[data-theme="genesys"] :is(.sec-motivations, .sec-equipment) .story-grid > .field-label,
+.sheet[data-theme="genesys"] .sec-notes > .sheet-area {
+  align-content: start;
+  padding: 8px 10px;
+  border: 1px solid var(--g-line);
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] :is(.sec-motivations, .sec-equipment) .story-grid > .field-label > span {
+  justify-self: start;
+  min-width: 70%;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--g-line);
+  color: var(--g-ink);
+  font-size: 14px;
+}
+
+.sheet[data-theme="genesys"] :is(.sec-motivations, .sec-equipment) .story-grid > .field-label > span::after {
+  content: ":";
+}
+
+.sheet[data-theme="genesys"] .sec-motivations .sheet-area {
+  min-height: 120px;
+}
+
+.sheet[data-theme="genesys"] .sec-equipment .sheet-area {
+  min-height: 150px;
+}
+
+.sheet[data-theme="genesys"] .sec-notes > .sheet-area {
+  min-height: 140px;
+}
+
+/* Description and money: label, colon, ruled line. */
+.sheet[data-theme="genesys"] .sec-description .story-grid {
+  grid-template-columns: 1fr;
+  gap: 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--g-line);
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] :is(.sec-description .field-label, .money-row .field-label) {
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: 6px;
+  border-bottom: 1px solid var(--g-line);
+}
+
+.sheet[data-theme="genesys"] .sec-description .field-label.span-all {
+  grid-template-columns: 1fr;
+  border-bottom: 0;
+}
+
+.sheet[data-theme="genesys"] :is(.sec-description .field-label > span, .money-row .field-label > span) {
+  padding-bottom: 5px;
+  color: var(--g-ink);
+  font-size: 14px;
+}
+
+.sheet[data-theme="genesys"] :is(.sec-description .field-label > span, .money-row .field-label > span)::after {
+  content: ":";
+}
+
+.sheet[data-theme="genesys"] .money-row {
+  grid-template-columns: minmax(220px, 50%);
+}
+
+.sheet[data-theme="genesys"] .money-row .field-label {
+  padding: 2px 8px 0;
+  border: 1px solid var(--g-line);
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .money-row .number-field {
+  text-align: left;
+}
+
+/* Critical injuries: severity diamonds and the result. */
+.sheet[data-theme="genesys"] .injury {
+  padding: 4px 6px;
+  border: 1px solid var(--g-line);
+  background: #ffffff;
+}
+
+/* Talents and special abilities: rounded rows of name, page and summary. */
+.sheet[data-theme="genesys"] .page-story > .sec-talents {
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.sheet[data-theme="genesys"] .sec-talents .talent-card {
+  grid-template-columns: 1.3fr 96px 4fr auto auto;
+  align-items: center;
+  gap: 0;
+  padding: 0 6px 0 4px;
+  border: 1px solid var(--g-line);
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.sheet[data-theme="genesys"] .sec-talents :is(.talent-top, .talent-meta) {
+  display: contents;
+}
+
+.sheet[data-theme="genesys"] .sec-talents .talent-card .field-label > span {
+  display: none;
+}
+
+.sheet[data-theme="genesys"] .sec-talents .talent-top .sheet-field { order: 1; border-right: 1px solid var(--g-line); border-radius: 0; }
+.sheet[data-theme="genesys"] .sec-talents .talent-meta .field-label { order: 2; border-right: 1px solid var(--g-line); }
+.sheet[data-theme="genesys"] .sec-talents .talent-card > .field-label { order: 3; }
+.sheet[data-theme="genesys"] .sec-talents .tier-tag { order: 4; margin: 0 4px; }
+.sheet[data-theme="genesys"] .sec-talents .talent-top .icon-button { order: 5; }
+
+.sheet[data-theme="genesys"] .sec-talents .sheet-area {
+  min-height: 32px;
+  padding-top: 7px;
+}
+
+/* ---------- Page 3 ---------- */
+
+.sheet[data-theme="genesys"] .page-talents {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  align-items: start;
+  gap: 24px;
+}
+
+.sheet[data-theme="genesys"] .page-talents > .sec-pyramid {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.sheet[data-theme="genesys"] .page-talents > .sec-pyramid-info {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 10px 12px 14px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--g-panel) 85%, transparent);
+}
+
+.sheet[data-theme="genesys"] .pyramid-lead {
+  padding: 10px 12px;
+  border: 1px solid var(--g-line);
+  background: #ffffff;
+  color: var(--g-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+
+/* Tiers become columns, tier 1 on the left; columns share a baseline so a
+   healthy pyramid climbs like the printed staircase. */
+.sheet[data-theme="genesys"] .pyramid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+}
+
+.sheet[data-theme="genesys"] .tier {
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 0;
+  border-left: 0;
+}
+
+.sheet[data-theme="genesys"] .tier[aria-label^="Tier 1"] { grid-column: 1; }
+.sheet[data-theme="genesys"] .tier[aria-label^="Tier 2"] { grid-column: 2; }
+.sheet[data-theme="genesys"] .tier[aria-label^="Tier 3"] { grid-column: 3; }
+.sheet[data-theme="genesys"] .tier[aria-label^="Tier 4"] { grid-column: 4; }
+.sheet[data-theme="genesys"] .tier[aria-label^="Tier 5"] { grid-column: 5; }
+
+.sheet[data-theme="genesys"] .tier-slots {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sheet[data-theme="genesys"] .tier-head {
+  order: 2;
+  display: grid;
+  justify-items: center;
+  width: 70%;
+  margin: 0 auto;
+  padding: 4px 0;
+  border: 1.5px solid var(--g-line);
+  border-radius: 4px;
+  background: var(--g-panel);
+  text-align: center;
+}
+
+/* The base style spreads the head with space-between, which in a one-column
+   grid pins everything left. */
+.sheet[data-theme="genesys"] .tier-head {
+  justify-content: center;
+}
+
+.sheet[data-theme="genesys"] .tier-name {
+  font-weight: 500;
+  font-size: 19px;
+}
+
+.sheet[data-theme="genesys"] .tier-head .muted {
+  font-size: 13px;
+}
+
+.sheet[data-theme="genesys"] .page-talents .talent-slot,
+.sheet[data-theme="genesys"] .page-talents .talent-add {
+  width: auto;
+}
+
+/* Talent cards: TALENT header, white body, active circle and page number. */
+.sheet[data-theme="genesys"] .talent-slot {
+  position: relative;
+  gap: 2px;
+  min-height: 120px;
+  padding: 16px 6px 6px;
+  border: 1.5px solid var(--g-line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 3px 3px 0 var(--g-panel);
+}
+
+.sheet[data-theme="genesys"] .talent-slot::before {
+  content: "Talent";
+  position: absolute;
+  top: 2px;
+  left: 8px;
+  color: var(--g-label);
+  font-family: var(--display-font);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="genesys"] .talent-slot .sheet-field {
+  border-bottom: 1px solid var(--g-line);
+  border-radius: 0;
+}
+
+.sheet[data-theme="genesys"] .slot-meta {
+  margin-top: auto;
+}
+
+.sheet[data-theme="genesys"] .slot-active .career-box {
+  border-style: dashed;
+  border-radius: 50%;
+}
+
+.sheet[data-theme="genesys"] .talent-add {
+  min-height: 120px;
+  border: 1.5px dashed var(--g-line);
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.5);
+}
+
+/* Narrow windows: stack, as in the other themes. */
+@media (max-width: 900px) {
+  .sheet[data-theme="genesys"] .page-play > .sheet-section {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .sheet[data-theme="genesys"] .badges {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sheet[data-theme="genesys"] .characteristics {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 52px;
+    background: none;
+  }
+
+  .sheet[data-theme="genesys"] .page-story {
+    grid-template-columns: 1fr;
+    grid-template-areas: "motivations" "description" "equipment" "notes" "injuries" "talents";
+  }
+
+  .sheet[data-theme="genesys"] .page-talents {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet[data-theme="genesys"] .page-talents > .sec-pyramid-info {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .sheet[data-theme="genesys"] .weapons-head {
+    display: none;
+  }
+
+  .sheet[data-theme="genesys"] .weapon {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.talents-head {
+  display: none;
+}
+
+.sheet[data-theme="genesys"] .talents-head {
+  display: grid;
+  grid-template-columns: 1.3fr 96px 4fr;
+  padding: 0 70px 0 18px;
+  color: var(--g-label);
+  font-family: var(--display-font);
+  font-size: 12.5px;
+  text-transform: uppercase;
+}
+
+.sheet[data-theme="genesys"] .talents-head > span:last-child {
+  text-align: right;
+}
+
+.theme-swatch[data-theme="terrinoth"] {
+  background: conic-gradient(#4a2e1c 0 40%, #c1532b 0 65%, #ead9b8 0);
+}
+
+/* Genesys: spells */
+.sheet[data-theme="genesys"] .sec-spells-intro .sheet-heading {
+  justify-self: start;
+}
+
+.sheet[data-theme="genesys"] .spell .sheet-area {
+  min-height: 70px;
+  border: 1px solid var(--rim);
+  background: var(--well-deep);
+}
+
+.theme-swatch[data-theme="keyforge"] {
+  background: conic-gradient(#8e1f22 0 40%, #f6c544 0 62%, #ffffff 0);
+}
+
+/* Genesys: the dice tray */
+.tray[data-theme="genesys"] .panel-head {
+  background: #e9eef1;
+}
+
+.tray[data-theme="genesys"] .panel-head .title {
+  font-family: var(--display-font);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
